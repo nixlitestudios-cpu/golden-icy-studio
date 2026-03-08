@@ -888,6 +888,12 @@ footer::before {
 }
 .plan-card.featured { animation: borderGlow 4s ease-in-out infinite; }
 
+/* ── PAGE LOADING BAR ── */
+#page-loader-bar{position:fixed;top:0;left:0;height:3px;width:0%;z-index:9999;background:linear-gradient(90deg,var(--gold),var(--ice),var(--gold));transition:width .3s ease;box-shadow:0 0 10px rgba(201,168,76,.8);pointer-events:none}
+#page-loader-bar.loading{width:70%}
+#page-loader-bar.done{width:100%;transition:width .2s ease}
+#page-loader-bar.hide{opacity:0;transition:opacity .3s ease}
+
 /* ── HERO SCROLL INDICATOR UPGRADE ── */
 .scroll-line {
   background: linear-gradient(180deg, var(--gold), var(--ice), transparent) !important;
@@ -935,6 +941,7 @@ footer::before {
 
 
 <!-- LOADER -->
+<div id="page-loader-bar"></div>
 <div id="loader">
   <div class="loader-logo">ICY</div>
   <div class="loader-bar"></div>
@@ -1161,32 +1168,32 @@ footer::before {
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobile-nav">
   <button onclick="closeMob()" style="position:absolute;top:1.5rem;right:1.8rem;background:none;border:none;color:var(--gold);font-size:1.6rem;cursor:pointer;opacity:.6;transition:opacity .3s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity='.6'">✕</button>
-  <a href="#home" data-page="home" onclick="navigateTo('home');closeMob()">Home</a>
-  <a href="#services" data-page="services" onclick="navigateTo('services');closeMob()">Services</a>
-  <a href="#gallery" data-page="gallery" onclick="navigateTo('gallery');closeMob()">Gallery</a>
-  <a href="#portfolio" data-page="portfolio" onclick="navigateTo('portfolio');closeMob()">Beats</a>
-  <a href="#samples" data-page="samples" onclick="navigateTo('samples');closeMob()">Samples</a>
-  <a href="#purchase" data-page="purchase" onclick="navigateTo('purchase');closeMob()">Pricing</a>
-  <a href="#booking" data-page="booking" onclick="navigateTo('booking');closeMob()">Book</a>
-  <a href="#about" data-page="about" onclick="navigateTo('about');closeMob()">About</a>
-  <a href="#ask" data-page="ask" onclick="navigateTo('ask');closeMob()">Contact</a>
+  <a href="#/home" data-page="home" onclick="navigateTo('home');closeMob()">Home</a>
+  <a href="#/services" data-page="services" onclick="navigateTo('services');closeMob()">Services</a>
+  <a href="#/gallery" data-page="gallery" onclick="navigateTo('gallery');closeMob()">Gallery</a>
+  <a href="#/portfolio" data-page="portfolio" onclick="navigateTo('portfolio');closeMob()">Beats</a>
+  <a href="#/samples" data-page="samples" onclick="navigateTo('samples');closeMob()">Samples</a>
+  <a href="#/purchase" data-page="purchase" onclick="navigateTo('purchase');closeMob()">Pricing</a>
+  <a href="#/booking" data-page="booking" onclick="navigateTo('booking');closeMob()">Book</a>
+  <a href="#/about" data-page="about" onclick="navigateTo('about');closeMob()">About</a>
+  <a href="#/ask" data-page="ask" onclick="navigateTo('ask');closeMob()">Contact</a>
 </div>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="#home" class="nav-logo">
+  <a href="#/home" class="nav-logo">
     <div class="logo-box"><span>ICY</span></div>
     <div class="logo-name"><span class="g">Golden</span><span class="s">ICY STUDIO</span></div>
   </a>
   <ul class="nav-links">
-    <li><a href="#home" data-page="home">Home</a></li>
-    <li><a href="#services" data-page="services">Services</a></li>
-    <li><a href="#portfolio" data-page="portfolio">Beats</a></li>
-    <li><a href="#samples" data-page="samples">Samples</a></li>
-    <li><a href="#purchase" data-page="purchase">Pricing</a></li>
-    <li><a href="#booking" data-page="booking">Book</a></li>
-    <li><a href="#about" data-page="about">About</a></li>
-    <li><a href="#ask" data-page="ask">Contact</a></li>
+    <li><a href="#/home" data-page="home">Home</a></li>
+    <li><a href="#/services" data-page="services">Services</a></li>
+    <li><a href="#/portfolio" data-page="portfolio">Beats</a></li>
+    <li><a href="#/samples" data-page="samples">Samples</a></li>
+    <li><a href="#/purchase" data-page="purchase">Pricing</a></li>
+    <li><a href="#/booking" data-page="booking">Book</a></li>
+    <li><a href="#/about" data-page="about">About</a></li>
+    <li><a href="#/ask" data-page="ask">Contact</a></li>
   </ul>
   <div class="nav-right">
     <button class="cart-btn" onclick="toggleCart()" title="Shopping Cart">
@@ -1199,8 +1206,8 @@ footer::before {
       <div class="user-menu" id="user-menu">
         <a onclick="openAuth();closeUserMenu()">👤 My Account</a>
         <a onclick="toggleCart();closeUserMenu()">🛒 Cart</a>
-        <a href="#purchase" data-page="purchase" onclick="closeUserMenu()">🎵 Buy Beats</a>
-        <a href="#booking" data-page="booking" onclick="closeUserMenu()">📅 Book Session</a>
+        <a href="#/purchase" data-page="purchase" onclick="closeUserMenu()">🎵 Buy Beats</a>
+        <a href="#/booking" data-page="booking" onclick="closeUserMenu()">📅 Book Session</a>
         <a onclick="doLogout();closeUserMenu()" id="logout-link" style="display:none;color:rgba(255,100,100,.7)">🚪 Logout</a>
       </div>
     </div>
@@ -1242,8 +1249,8 @@ footer::before {
     <p class="hero-sub">Where Gold Meets Ice — Crafting Sounds That Move The World</p>
     <div class="hero-div"></div>
     <div class="hero-btns">
-      <a href="#portfolio" class="btn-gold">🎵 Browse Beats</a>
-      <a href="#booking" class="btn-ice">📅 Book Session</a>
+      <a href="#/portfolio" class="btn-gold">🎵 Browse Beats</a>
+      <a href="#/booking" class="btn-ice">📅 Book Session</a>
       <button class="btn-ice" onclick="openAuth()">👤 Login / Sign Up</button>
     </div>
     <div class="hero-stats">
@@ -1376,15 +1383,12 @@ footer::before {
 <section id="mp3upload">
   <div class="section-wrap">
     <div class="reveal"><p class="sec-label">Direct Upload</p><h2 class="sec-title">Upload Beats</h2><div class="gold-line"></div>
-    <p style="font-size:.83rem;opacity:.6;max-width:550px;line-height:1.9;margin-bottom:.8rem">Upload MP3 or WAV files directly. Visitors can preview, purchase and download your beats.</p>
-    <div id="beat-slot-status" style="display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);margin-bottom:1.5rem;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)">
-      <span>📁</span> <span id="beat-slot-text">0 / 2 beats uploaded</span>
-    </div></div>
-    <div class="mp3-drop reveal" id="mp3-zone" onclick="mp3ZoneClick()" ondragover="mp3DO(event)" ondragleave="mp3DL(event)" ondrop="mp3Drop(event)">
+    <p style="font-size:.83rem;opacity:.6;max-width:550px;line-height:1.9;margin-bottom:2rem">Upload MP3 or WAV files directly. Visitors can preview and play your beats before purchasing.</p></div>
+    <div class="mp3-drop reveal" id="mp3-zone" onclick="document.getElementById('mp3-input').click()" ondragover="mp3DO(event)" ondragleave="mp3DL(event)" ondrop="mp3Drop(event)">
       <input type="file" id="mp3-input" accept=".mp3,.wav,audio/*" multiple onchange="loadMP3s(this.files)"/>
       <div class="mp3-drop-icon">🎵</div>
       <h3>Drop Beats Here</h3>
-      <p>Click to browse · MP3 & WAV · Max 2 beats · Permanently saved</p>
+      <p>Click to browse · MP3 & WAV supported</p>
       <span class="btn-gold" style="pointer-events:none">Choose Files</span>
     </div>
     <div class="mp3-list" id="mp3-list">
@@ -1441,7 +1445,7 @@ footer::before {
         <div class="plan-icon">🎙️</div><div class="plan-name">Studio Session</div>
         <div class="plan-price" data-m="$28" data-a="$22">$28 <span>/ hr</span></div>
         <ul class="plan-features"><li>Professional engineer included</li><li>Recording & mixing</li><li>Same-day rough mix</li><li>Min. 2hr booking</li><li>Free consultation</li></ul>
-        <a href="#booking" class="btn-ice" style="display:flex;width:100%;justify-content:center;padding:.85rem">📅 Book Now</a>
+        <a href="#/booking" class="btn-ice" style="display:flex;width:100%;justify-content:center;padding:.85rem">📅 Book Now</a>
       </div>
     </div>
   </div>
@@ -1602,7 +1606,7 @@ footer::before {
     </div>
     <div class="footer-col">
       <h4>Quick Links</h4>
-      <a href="#home">Home</a><a href="#services">Services</a><a href="#portfolio">Beats</a><a href="#samples">Sample Packs</a><a href="#purchase">Pricing</a><a href="#booking">Book Session</a><a href="#about">About</a><a href="#ask">Contact</a>
+      <a href="#/home">Home</a><a href="#/services">Services</a><a href="#/portfolio">Beats</a><a href="#/samples">Sample Packs</a><a href="#/purchase">Pricing</a><a href="#/booking">Book Session</a><a href="#/about">About</a><a href="#/ask">Contact</a>
     </div>
     <div class="footer-col">
       <h4>Contact</h4>
@@ -1640,20 +1644,7 @@ setTimeout(dismissLoader, 3000);
   draw();
 })();
 
-function navigateTo(pageId, pushState=true) {
-  // Routed via window.navigateTo set in DOMContentLoaded
-  if(window._nav) window._nav(pageId, pushState);
-}
-
-// ── PAGE ROUTER ──
-document.addEventListener('DOMContentLoaded', function() {
-
-// Define navEl and ro first so navigateTo can use them
-const navEl = document.getElementById('nav');
-const ro = new IntersectionObserver(entries => entries.forEach((e,i) => {
-  if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
-}), { threshold: .08 });
-document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => ro.observe(el));
+// ── PAGE ROUTER ── (defined globally above) (global scope so onclick attrs work)
 const PAGES = {
   home:     { label: 'Home',     title: 'Golden Icy Studio | Beat Production' },
   services: { label: 'Services', title: 'Services | Golden Icy Studio' },
@@ -1668,87 +1659,104 @@ const PAGES = {
 const PAGE_ORDER = Object.keys(PAGES);
 let currentPage = '';
 
-function navigateTo(pageId, pushState=true) {
-  if (!PAGES[pageId] || pageId === currentPage) return;
-  const prev = document.getElementById('section-' + currentPage);
-  const next = document.getElementById('section-' + pageId);
-  if (!next) return;
+function getHashPage(){
+  const h = window.location.hash.replace('#/','').replace('#','').split('?')[0].trim();
+  return PAGES[h] ? h : 'home';
+}
 
-  // Animate out
-  if (prev) {
-    prev.classList.add('page-leaving');
-    setTimeout(() => { prev.classList.remove('page-active','page-leaving'); prev.style.display='none'; }, 260);
+function navigateTo(pageId, pushState=true){
+  if(!PAGES[pageId] || pageId === currentPage) return;
+
+  // ── Loading bar ──
+  const bar = document.getElementById('page-loader-bar');
+  if(bar){
+    bar.style.width='0%'; bar.style.opacity='1'; bar.style.transition='none';
+    requestAnimationFrame(()=>{
+      bar.style.transition='width 0.35s ease';
+      bar.style.width='75%';
+      clearTimeout(bar._t);
+      bar._t = setTimeout(()=>{
+        bar.style.transition='width 0.2s ease';
+        bar.style.width='100%';
+        setTimeout(()=>{ bar.style.transition='opacity 0.3s'; bar.style.opacity='0';
+          setTimeout(()=>{ bar.style.width='0%'; bar.style.opacity='1'; },350);
+        },200);
+      },380);
+    });
   }
 
-  // Animate in
-  next.style.display = 'block';
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      next.classList.add('page-active');
-    });
-  });
+  const prev = document.getElementById('section-'+currentPage);
+  const next = document.getElementById('section-'+pageId);
+  if(!next) return;
+
+  if(prev){
+    prev.classList.add('page-leaving');
+    setTimeout(()=>{ prev.classList.remove('page-active','page-leaving'); prev.style.display='none'; },260);
+  }
+  next.style.display='block';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.add('page-active')));
 
   currentPage = pageId;
-  document.title = PAGES[pageId].title;
 
-  // Update nav active states
-  document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(a => {
-    a.classList.toggle('active', a.dataset.page === pageId);
-  });
+  // ── Chrome tab title + URL ──
+  const t = PAGES[pageId].title;
+  document.title = t;
+  if(pushState) history.pushState({page:pageId}, t, '#/'+pageId);
+  else          history.replaceState({page:pageId}, t, '#/'+pageId);
 
-  // Update page dots
-  document.querySelectorAll('.page-dot').forEach(d => {
-    d.classList.toggle('active', d.dataset.page === pageId);
-  });
+  // Nav active states
+  document.querySelectorAll('.nav-links a,.mobile-nav a').forEach(a=>a.classList.toggle('active',a.dataset.page===pageId));
+  document.querySelectorAll('.page-dot').forEach(d=>d.classList.toggle('active',d.dataset.page===pageId));
+  const bc=document.getElementById('bc-current'); if(bc) bc.textContent=PAGES[pageId].label;
 
-  // Breadcrumb
-  const bc = document.getElementById('bc-current');
-  if (bc) bc.textContent = PAGES[pageId].label;
+  window.scrollTo({top:0,behavior:'smooth'});
 
-  // URL hash
-  if (pushState) history.pushState({ page: pageId }, '', '#' + pageId);
+  const navEl=document.getElementById('nav');
+  if(navEl) navEl.classList.toggle('scrolled', window.scrollY>60);
 
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Re-trigger reveal animations
+  setTimeout(()=>{
+    const ro2=new IntersectionObserver(entries=>entries.forEach((e,i)=>{
+      if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*80);
+    }),{threshold:.08});
+    document.querySelectorAll('#section-'+pageId+' .reveal,#section-'+pageId+' .reveal-l,#section-'+pageId+' .reveal-r')
+      .forEach(el=>{el.classList.remove('visible');ro2.observe(el);});
+  },50);
 
-  // Nav scrolled state
-  navEl.classList.toggle('scrolled', window.scrollY > 60);
-
-  // Re-trigger reveals on new page
-  setTimeout(() => {
-    document.querySelectorAll('#section-' + pageId + ' .reveal, #section-' + pageId + ' .reveal-l, #section-' + pageId + ' .reveal-r').forEach(el => {
-      el.classList.remove('visible');
-      ro.observe(el);
-    });
-  }, 50);
-
-  closeMob();
+  if(typeof closeMob==='function') closeMob();
 }
-window._nav = navigateTo;
 
-// NAV SCROLL (for scrolled class only)
+// Back/forward button
+window.addEventListener('popstate', e=>{
+  const page=(e.state&&e.state.page)||getHashPage();
+  navigateTo(page,false);
+});
+
+// Click intercept for all hash links
+document.addEventListener('click', e=>{
+  const a=e.target.closest('a[href^="#"]');
+  if(!a) return;
+  const raw=a.getAttribute('href').replace('#/','').replace('#','');
+  if(PAGES[raw]){e.preventDefault();navigateTo(raw);}
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+
+// Reveal observer
+const ro = new IntersectionObserver(entries => entries.forEach((e,i) => {
+  if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+}), { threshold: .08 });
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => ro.observe(el));
+
+const navEl = document.getElementById('nav');
+
+// NAV SCROLL
 window.addEventListener('scroll', () => {
   navEl.classList.toggle('scrolled', window.scrollY > 60);
   document.getElementById('btt').classList.toggle('show', window.scrollY > 400);
 });
 
-// REVEAL already initialized above
-
-// Handle browser back/forward
-window.addEventListener('popstate', e => {
-  const page = (e.state && e.state.page) || 'home';
-  navigateTo(page, false);
-});
-
-// Intercept all hash links
-document.addEventListener('click', e => {
-  const a = e.target.closest('a[href^="#"]');
-  if (!a) return;
-  const hash = a.getAttribute('href').slice(1);
-  if (PAGES[hash]) { e.preventDefault(); navigateTo(hash); }
-});
-
-// Keyboard navigation between pages
+// Keyboard navigation
 document.addEventListener('keydown', e => {
   if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
   const idx = PAGE_ORDER.indexOf(currentPage);
@@ -1756,12 +1764,10 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); if (idx > 0) navigateTo(PAGE_ORDER[idx-1]); }
 });
 
-// Init router on load
+// Init router
 (function initRouter() {
-  const hash = window.location.hash.slice(1);
-  const startPage = PAGES[hash] ? hash : 'home';
+  const startPage = getHashPage();
 
-  // Wrap each section in a page container and hide all
   PAGE_ORDER.forEach(id => {
     const sec = document.getElementById(id);
     if (!sec) return;
@@ -1773,25 +1779,18 @@ document.addEventListener('keydown', e => {
     wrapper.appendChild(sec);
   });
 
-  // Also wrap footer in last page or make it global
   const footer = document.querySelector('footer');
-  if (footer) {
-    const wrapper = document.getElementById('section-ask');
-    if (wrapper) wrapper.appendChild(footer);
-  }
+  if (footer) { const w = document.getElementById('section-ask'); if (w) w.appendChild(footer); }
 
-  // Wire page dot clicks
   document.querySelectorAll('.page-dot[data-page]').forEach(dot => {
     dot.addEventListener('click', () => navigateTo(dot.dataset.page));
   });
 
-  // Wire nav logo
   const navLogo = document.querySelector('.nav-logo');
   if (navLogo) navLogo.addEventListener('click', e => { e.preventDefault(); navigateTo('home'); });
 
-  // Set initial page
-  history.replaceState({ page: startPage }, '', '#' + startPage);
-  currentPage = ''; // allow navigateTo to proceed
+  history.replaceState({ page: startPage }, PAGES[startPage].title, '#/' + startPage);
+  currentPage = '';
   navigateTo(startPage, false);
 })();
 
@@ -2143,9 +2142,6 @@ function submitMobilePayment(){
     sendPaymentNotification(name,email,activeMobileMethod,ref,itemList,t.total.toFixed(2));
     document.getElementById('order-ref').textContent=ref;
     checkoutStep(3);
-    // Auto-download purchased beats
-    const beatPurchases=cart.filter(c=>c._beatUid);
-    if(beatPurchases.length>0){beatPurchases.forEach((item,i)=>setTimeout(()=>downloadBeat(item._beatUid),1000+i*800));}
     btn.textContent='✓ Submit Payment Confirmation';btn.disabled=false;
     proofFile=null;
     document.getElementById('proof-drop').style.borderColor='';
@@ -2177,39 +2173,7 @@ function fmtCard(el){let v=el.value.replace(/\D/g,'').substring(0,16);el.value=v
 function fmtExp(el){let v=el.value.replace(/\D/g,'');if(v.length>=2)v=v.substring(0,2)+'/'+v.substring(2,4);el.value=v;}
 function initPayPalButtons(){}
 function processCard(){}function processApple(){}function processGoogle(){}
-function finishCheckout(){
-  // Auto-download any beats that were purchased
-  const beatItems = cart.filter(c=>c._beatUid);
-  if(beatItems.length>0){
-    beatItems.forEach((item,i)=>{
-      setTimeout(()=>downloadBeat(item._beatUid), i*800);
-    });
-    setTimeout(()=>toast('✓ Your beats are downloading!'), beatItems.length*800);
-  }
-  // Show purchase success panel
-  showPurchaseSuccess();
-  cart=[];renderCart();updateCartCount();closeCheckout();
-  if(!beatItems.length) toast('🎵 Thank you! Check your email for your license.');
-}
-
-function showPurchaseSuccess(){
-  let modal = document.getElementById('purchase-success-modal');
-  if(!modal){
-    modal = document.createElement('div');
-    modal.id='purchase-success-modal';
-    modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:900;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px)';
-    modal.innerHTML=`<div style="background:var(--blk2);border:1px solid var(--gb);max-width:440px;width:90%;padding:2.5rem;text-align:center;animation:modalIn .4s ease;position:relative">
-      <div style="font-size:3.5rem;margin-bottom:1rem">🎉</div>
-      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.1em;background:linear-gradient(90deg,var(--gold-l),var(--ice));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem">Purchase Successful!</h2>
-      <div style="width:60px;height:2px;background:linear-gradient(90deg,var(--gold),var(--ice));margin:.8rem auto 1.2rem"></div>
-      <p style="font-size:.82rem;opacity:.7;line-height:1.8;margin-bottom:.6rem">Your payment has been received and confirmed. Your beats are downloading automatically.</p>
-      <p style="font-size:.78rem;color:var(--gold-l);opacity:.85;margin-bottom:1.8rem">📧 A confirmation has been sent to your email. License docs will follow within 24 hrs.</p>
-      <button class="btn-gold" onclick="document.getElementById('purchase-success-modal').remove()" style="width:100%;justify-content:center">✓ Done</button>
-    </div>`;
-    document.body.appendChild(modal);
-    modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
-  }
-}
+function finishCheckout(){cart=[];renderCart();updateCartCount();closeCheckout();toast('🎵 Thank you! Check your email for your license.')}
 
 // ── YOUTUBE ──
 function playBeat(id,vid){
@@ -2251,134 +2215,37 @@ function lbOpen(src,cap){document.getElementById('lb-img').src=src;document.getE
 function lbClose(e){if(!e||e.target===document.getElementById('lightbox')||e.target.tagName==='BUTTON')document.getElementById('lightbox').classList.remove('open')}
 document.querySelector('.lb-close').onclick=lbClose;
 
-// ── MP3 UPLOAD (persistent, 2-beat limit, duplicate check, download) ──
-const MAX_BEATS = 2;
-let savedBeats = [];
-
-function loadSavedBeats(){
-  try {
-    const raw = localStorage.getItem('gis_beats');
-    savedBeats = raw ? JSON.parse(raw) : [];
-  } catch(e){ savedBeats = []; }
-  savedBeats.forEach(b => renderBeatCard(b));
-  updateBeatSlotStatus();
-}
-
-function persistBeats(){
-  try { localStorage.setItem('gis_beats', JSON.stringify(savedBeats)); } catch(e){}
-}
-
-function updateBeatSlotStatus(){
-  const txt = document.getElementById('beat-slot-text');
-  if(txt) txt.textContent = savedBeats.length+' / '+MAX_BEATS+' beats uploaded';
-  const zone = document.getElementById('mp3-zone');
-  if(zone){
-    if(savedBeats.length >= MAX_BEATS){
-      zone.style.opacity='.4';zone.style.pointerEvents='none';
-      zone.querySelector('h3').textContent='Beat Slots Full (2/2)';
-      zone.querySelector('p').textContent='Remove a beat to upload a new one';
-    } else {
-      zone.style.opacity='1';zone.style.pointerEvents='auto';
-      zone.querySelector('h3').textContent='Drop Beats Here';
-      zone.querySelector('p').textContent='Click to browse · MP3 & WAV · Max 2 beats · Permanently saved';
-    }
-  }
-}
-
-function mp3ZoneClick(){
-  if(savedBeats.length >= MAX_BEATS){ toast('⚠️ Max 2 beats allowed. Remove one first.'); return; }
-  document.getElementById('mp3-input').click();
-}
-
-function mp3DO(e){e.preventDefault();if(savedBeats.length<MAX_BEATS)document.getElementById('mp3-zone').classList.add('drag')}
+// ── MP3 UPLOAD ──
+function mp3DO(e){e.preventDefault();document.getElementById('mp3-zone').classList.add('drag')}
 function mp3DL(){document.getElementById('mp3-zone').classList.remove('drag')}
 function mp3Drop(e){e.preventDefault();mp3DL();loadMP3s(e.dataTransfer.files)}
-
 function loadMP3s(files){
   const list=document.getElementById('mp3-list');
   const empty=document.getElementById('mp3-empty');if(empty)empty.remove();
-  let added=0;
   Array.from(files).forEach(file=>{
     if(!file.type.startsWith('audio/'))return;
-    if(savedBeats.length+added >= MAX_BEATS){
-      toast('⚠️ Max 2 beats allowed. Slot full.');return;
-    }
-    // Duplicate check by filename
-    const cleanName = file.name.replace(/\.[^.]+$/,'');
-    const isDup = savedBeats.some(b=>b.name.toLowerCase()===cleanName.toLowerCase());
-    if(isDup){ toast('⚠️ "'+cleanName+'" already exists. Remove it first.'); return; }
-
-    const reader = new FileReader();
-    reader.onload = function(ev){
-      const uid = 'b-'+Date.now()+'-'+Math.floor(Math.random()*9999);
-      const size=(file.size/1024/1024).toFixed(1)+'MB';
-      const fmt=file.name.split('.').pop().toUpperCase();
-      const beat = { uid, name:cleanName, fmt, size, data:ev.target.result, price:8, lic:'Basic License', ext:file.name.split('.').pop() };
-      savedBeats.push(beat);
-      persistBeats();
-      renderBeatCard(beat);
-      updateBeatSlotStatus();
-      added++;
-    };
-    reader.readAsDataURL(file);
-  });
-  if(Array.from(files).some(f=>f.type.startsWith('audio/'))) toast('✓ Beat saved permanently!');
-}
-
-function renderBeatCard(beat){
-  const list = document.getElementById('mp3-list');
-  const empty = document.getElementById('mp3-empty'); if(empty) empty.remove();
-  if(document.getElementById('mp3-'+beat.uid)) return; // already rendered
-  const card = document.createElement('div'); card.className='mp3-card'; card.id='mp3-'+beat.uid;
-  card.innerHTML=`
-    <div class="mp3-thumb-icon">🎵</div>
-    <div class="mp3-info">
-      <h4>${beat.name}</h4>
-      <p>${beat.fmt} · ${beat.size} · <span style="color:var(--gold);font-size:.62rem;letter-spacing:.12em">SAVED</span></p>
-      <audio controls src="${beat.data}" preload="metadata" style="width:100%;margin-top:.5rem;accent-color:var(--gold)"></audio>
-      <div class="mp3-meta-row" style="margin-top:.5rem">
-        <input class="mp3-price-in" type="text" placeholder="R ${beat.price}.00" id="price-${beat.uid}"/>
-        <select class="mp3-lic-sel" id="lic-${beat.uid}"><option>Basic License</option><option>Premium License</option><option>Exclusive</option></select>
-        <button class="btn-sm btn-gold" onclick="addBeatToCart('${beat.uid}')">🛒 Add to Cart</button>
-        <button class="btn-sm btn-ice" onclick="downloadBeat('${beat.uid}')" title="Download" style="gap:.3rem">⬇ Download</button>
+    const url=URL.createObjectURL(file);
+    const size=(file.size/1024/1024).toFixed(1)+'MB';
+    const fmt=file.name.split('.').pop().toUpperCase();
+    const uid=Date.now()+Math.random();
+    const card=document.createElement('div');card.className='mp3-card';card.id='mp3-'+uid;
+    const name=file.name.replace(/\.[^.]+$/,'');
+    card.innerHTML=`
+      <div class="mp3-thumb-icon">🎵</div>
+      <div class="mp3-info">
+        <h4>${name}</h4>
+        <p>${fmt} · ${size}</p>
+        <audio controls src="${url}" preload="metadata" style="width:100%;margin-top:.5rem;accent-color:var(--gold)"></audio>
+        <div class="mp3-meta-row" style="margin-top:.5rem">
+          <input class="mp3-price-in" type="text" placeholder="R 0.00"/>
+          <select class="mp3-lic-sel"><option>Basic License</option><option>Premium License</option><option>Exclusive</option></select>
+          <button class="btn-sm btn-gold" onclick="addToCart({id:'mp3-${uid}',name:'${name}',price:8,type:'Beat (MP3)',lic:'Basic License'})">🛒 Add to Cart</button>
+        </div>
       </div>
-    </div>
-    <button class="mp3-del" onclick="deleteBeat('${beat.uid}')">✕</button>`;
-  list.appendChild(card);
-}
-
-function addBeatToCart(uid){
-  const beat = savedBeats.find(b=>b.uid===uid);
-  if(!beat) return;
-  const priceEl=document.getElementById('price-'+uid);
-  const licEl=document.getElementById('lic-'+uid);
-  const rawPrice=priceEl?priceEl.value.replace(/[^0-9.]/g,''):'';
-  const price=parseFloat(rawPrice)||beat.price;
-  const lic=licEl?licEl.value:'Basic License';
-  addToCart({id:'mp3-'+uid, name:beat.name, price, type:'Beat ('+beat.fmt+')', lic, _beatUid:uid});
-}
-
-function downloadBeat(uid){
-  const beat = savedBeats.find(b=>b.uid===uid);
-  if(!beat){ toast('⚠️ Beat not found.'); return; }
-  const a=document.createElement('a');
-  a.href=beat.data;
-  a.download=beat.name+'.'+beat.ext;
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
-  toast('⬇ Downloading "'+beat.name+'"…');
-}
-
-function deleteBeat(uid){
-  savedBeats = savedBeats.filter(b=>b.uid!==uid);
-  persistBeats();
-  const card=document.getElementById('mp3-'+uid);
-  if(card) card.remove();
-  updateBeatSlotStatus();
-  if(savedBeats.length===0){
-    const list=document.getElementById('mp3-list');
-    list.innerHTML='<div class="mp3-empty" id="mp3-empty">No beats uploaded yet — add your first one above ↑</div>';
-  }
-  toast('Beat removed.');
+      <button class="mp3-del" onclick="document.getElementById('mp3-${uid}').remove();toast('Beat removed')">✕</button>`;
+    list.appendChild(card);
+  });
+  toast('✓ Beats loaded!');
 }
 
 // ── PRICING TOGGLE ──
@@ -2457,7 +2324,6 @@ function submitBooking(){
   document.getElementById('bk-sum').style.display='none';
 }
 renderCal();
-loadSavedBeats();
 
 // ── TESTIMONIALS ──
 let tIdx=0;
