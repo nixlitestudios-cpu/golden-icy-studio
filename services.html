@@ -6,7 +6,6 @@
 <title>Services | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -930,8 +929,6 @@ footer::before {
 }
 
 </style>
-
-</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -1231,17 +1228,20 @@ footer::before {
 </div>
 
 
+<!-- SERVICES PAGE WRAPPER -->
+<div class="page-wrapper page-active" id="page-services">
+
 <!-- SERVICES -->
-<section id="services">
+<section id="services" style="padding-top:80px">
   <div class="section-wrap">
-    <div class="reveal"><p class="sec-label">What We Do</p><h2 class="sec-title">Services</h2><div class="gold-line"></div></div>
+    <div class=""><p class="sec-label">What We Do</p><h2 class="sec-title">Services</h2><div class="gold-line"></div></div>
     <div class="services-grid">
-      <div class="svc-card reveal"><span class="svc-icon">🎹</span><h3>Beat Production</h3><p>Custom-crafted beats across all genres — Afrobeats, Hip-Hop, Trap, Amapiano, Drill and more.</p><span class="svc-num">01</span></div>
-      <div class="svc-card reveal"><span class="svc-icon">🎚️</span><h3>Mixing & Mastering</h3><p>Professional mixing and mastering services that make your track radio-ready and streaming optimised.</p><span class="svc-num">02</span></div>
-      <div class="svc-card reveal"><span class="svc-icon">🎤</span><h3>Recording Sessions</h3><p>Book a studio session and record in a professional acoustic environment designed for creativity.</p><span class="svc-num">03</span></div>
-      <div class="svc-card reveal"><span class="svc-icon">📦</span><h3>Sample Kits</h3><p>Exclusive drum kits, melody loops, one-shots and FX packs crafted in-house for producers.</p><span class="svc-num">04</span></div>
-      <div class="svc-card reveal"><span class="svc-icon">🎼</span><h3>Custom Composition</h3><p>Need a fully original track for your project, film, advert or brand? We compose from scratch.</p><span class="svc-num">05</span></div>
-      <div class="svc-card reveal"><span class="svc-icon">🚀</span><h3>Artist Development</h3><p>From first demo to release-ready artist. We guide your sound, image, and strategy for success.</p><span class="svc-num">06</span></div>
+      <div class="svc-card"><span class="svc-icon">🎹</span><h3>Beat Production</h3><p>Custom-crafted beats across all genres — Afrobeats, Hip-Hop, Trap, Amapiano, Drill and more.</p><span class="svc-num">01</span></div>
+      <div class="svc-card"><span class="svc-icon">🎚️</span><h3>Mixing & Mastering</h3><p>Professional mixing and mastering services that make your track radio-ready and streaming optimised.</p><span class="svc-num">02</span></div>
+      <div class="svc-card"><span class="svc-icon">🎤</span><h3>Recording Sessions</h3><p>Book a studio session and record in a professional acoustic environment designed for creativity.</p><span class="svc-num">03</span></div>
+      <div class="svc-card"><span class="svc-icon">📦</span><h3>Sample Kits</h3><p>Exclusive drum kits, melody loops, one-shots and FX packs crafted in-house for producers.</p><span class="svc-num">04</span></div>
+      <div class="svc-card"><span class="svc-icon">🎼</span><h3>Custom Composition</h3><p>Need a fully original track for your project, film, advert or brand? We compose from scratch.</p><span class="svc-num">05</span></div>
+      <div class="svc-card"><span class="svc-icon">🚀</span><h3>Artist Development</h3><p>From first demo to release-ready artist. We guide your sound, image, and strategy for success.</p><span class="svc-num">06</span></div>
     </div>
   </div>
 </section>
@@ -1279,9 +1279,9 @@ footer::before {
   </div>
 </footer>
 
+</div><!-- /.page-wrapper -->
 
-<div id="toast"></div>
-<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 
@@ -1351,6 +1351,13 @@ document.addEventListener('DOMContentLoaded', function() {
   var ro=new IntersectionObserver(function(entries){entries.forEach(function(e,i){if(e.isIntersecting)setTimeout(function(){e.target.classList.add('visible');},i*80);});},{threshold:.08});
   document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(function(el){ro.observe(el);});
   window.addEventListener('scroll',function(){navEl.classList.toggle('scrolled',window.scrollY>60);var b=document.getElementById('btt');if(b)b.classList.toggle('show',window.scrollY>400);});
+
+  // Set active breadcrumb and page dot for services
+  var bcEl=document.getElementById('bc-current');
+  if(bcEl) bcEl.textContent='Services';
+  document.querySelectorAll('.page-dot').forEach(function(d){
+    d.classList.toggle('active', d.dataset.page==='services');
+  });
 });
 
 // MOBILE NAV — global so hamburger onclick can reach them
@@ -1912,12 +1919,13 @@ function submitBooking(){
   document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
   document.getElementById('bk-sum').style.display='none';
 }
-renderCal();
+if(document.getElementById('cal-title')) renderCal();
 
 // ── TESTIMONIALS ──
 let tIdx=0;
 const tTrack=document.getElementById('ttrack');
 function slideT(dir){
+  if(!tTrack) return;
   const items=tTrack.querySelectorAll('.testimonial');
   tIdx=Math.max(0,Math.min(items.length-1,tIdx+dir));
   tTrack.style.transform=`translateX(-${tIdx*100}%)`;
@@ -1947,7 +1955,29 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
+    from_name:   name,
+    reply_to:    email,
+    buyer_name:  name,
+    buyer_email: email,
+    pay_method:  'Contact Form',
+    order_ref:   'CF-'+Date.now().toString().slice(-8),
+    order_items: svc,
+    order_total: 'N/A',
+    message:     msg
+  }).then(function(){
+    if(btn){btn.textContent='Message Sent ✓';btn.disabled=false;}
+    toast('✓ Message sent! We\'ll get back to you shortly.');
+  }).catch(function(){
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+    toast('✓ Message received! We\'ll be in touch soon.');
+  });
+}
 
+// ── TESTIMONIALS safe init ──
+document.addEventListener('DOMContentLoaded', function(){
+  const tTrackEl = document.getElementById('ttrack');
+  if(!tTrackEl) window.tTrack = null;
+});
 </script>
 </body>
 </html>

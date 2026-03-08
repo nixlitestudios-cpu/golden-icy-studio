@@ -6,7 +6,6 @@
 <title>Gallery | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -426,12 +425,12 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
 #btt:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(201,168,76,.55)}
 
 /* REVEAL */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-l{opacity:0;transform:translateX(-30px);transition:opacity .75s ease,transform .75s ease}
-.reveal-l.visible{opacity:1;transform:translateX(0)}
-.reveal-r{opacity:0;transform:translateX(30px);transition:opacity .75s ease,transform .75s ease}
-.reveal-r.visible{opacity:1;transform:translateX(0)}
+.reveal{opacity:1;transform:none}
+.reveal.visible{opacity:1;transform:none}
+.reveal-l{opacity:1;transform:none}
+.reveal-l.visible{opacity:1;transform:none}
+.reveal-r{opacity:1;transform:none}
+.reveal-r.visible{opacity:1;transform:none}
 
 /* RESPONSIVE */
 @media(max-width:1024px){.about-grid,.ask-grid,.booking-grid,.footer-top{grid-template-columns:1fr;gap:2.5rem}.footer-top{grid-template-columns:1fr 1fr}}
@@ -930,8 +929,6 @@ footer::before {
 }
 
 </style>
-
-</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -1232,7 +1229,7 @@ footer::before {
 
 
 <!-- GALLERY -->
-<section id="gallery">
+<section id="gallery" style="padding-top:80px">
   <div class="section-wrap">
     <div class="reveal"><p class="sec-label">The Studio</p><h2 class="sec-title">Photos</h2><div class="gold-line"></div></div>
     <div class="upload-zone reveal" id="gallery-zone" onclick="document.getElementById('gallery-input').click()" ondragover="galDO(event)" ondragleave="galDL(event)" ondrop="galDrop(event)">
@@ -1339,7 +1336,9 @@ setTimeout(dismissLoader, 3000);
 
 // PARTICLES
 (function(){
-  const c=document.getElementById('particles-canvas'),ctx=c.getContext('2d');
+  const c=document.getElementById('particles-canvas');
+  if(!c) return;
+  const ctx=c.getContext('2d');
   let W,H,pts=[];
   function res(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
   res();window.addEventListener('resize',res);
@@ -1957,7 +1956,25 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
-
+    from_name:   name,
+    from_email:  email,
+    from_phone:  phone,
+    service:     svc,
+    message:     msg
+  }).then(function(){
+    toast('\u2713 Message sent! We\'ll get back to you shortly.');
+    document.getElementById('f-name').value='';
+    document.getElementById('f-email').value='';
+    document.getElementById('f-phone').value='';
+    document.getElementById('f-svc').value='';
+    document.getElementById('f-msg').value='';
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  }, function(err){
+    toast('\u26a0\ufe0f Failed to send. Please try again.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+    console.error('EmailJS error:',err);
+  });
+}
 </script>
 </body>
 </html>

@@ -6,7 +6,6 @@
 <title>About | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -930,8 +929,6 @@ footer::before {
 }
 
 </style>
-
-</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -1232,16 +1229,16 @@ footer::before {
 
 
 <!-- ABOUT -->
-<section id="about">
+<section id="about" style="padding-top:100px">
   <div class="section-wrap">
     <div class="about-grid">
-      <div class="about-visual reveal-l">
+      <div class="about-visual reveal-l visible">
         <div class="orbit"><div class="orbit-dot"></div></div>
         <div class="orbit"><div class="orbit-dot"></div></div>
         <div class="orbit"></div>
         <div class="about-center-el"><span class="big">GIS</span><span class="sm">Est. 2024</span></div>
       </div>
-      <div class="reveal-r">
+      <div class="reveal-r visible">
         <p class="sec-label">Our Story</p><h2 class="sec-title">About Us</h2><div class="gold-line"></div>
         <p class="about-text">Golden Icy Studio is an independent music production powerhouse built on one belief — every artist deserves world-class sound. We blend the warmth of gold with the crisp clarity of ice to create beats that cut through the noise.</p>
         <p class="about-text">From underground Amapiano grooves to hard-hitting Trap anthems, our catalogue spans every genre with a signature sound that is unmistakably Golden Icy.</p>
@@ -1969,7 +1966,28 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
-
+    from_name:   name,
+    reply_to:    email||STUDIO_EMAIL,
+    buyer_name:  name,
+    buyer_email: email||'(no email)',
+    pay_method:  svc,
+    order_ref:   'CONTACT',
+    order_items: svc,
+    order_total: '$0',
+    message:     'New contact form message from '+name+' ('+phone+'): '+msg
+  }).then(()=>{
+    toast('✓ Message sent! We\'ll be in touch soon.');
+    document.getElementById('f-name').value='';
+    document.getElementById('f-email').value='';
+    document.getElementById('f-phone').value='';
+    document.getElementById('f-svc').value='';
+    document.getElementById('f-msg').value='';
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  }).catch(()=>{
+    toast('⚠️ Could not send via email. Please contact us directly.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  });
+}
 </script>
 </body>
 </html>

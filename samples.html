@@ -6,7 +6,6 @@
 <title>Sample Packs | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -930,8 +929,6 @@ footer::before {
 }
 
 </style>
-
-</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -1232,16 +1229,16 @@ footer::before {
 
 
 <!-- SAMPLES -->
-<section id="samples">
+<section id="samples" style="padding-top:100px">
   <div class="section-wrap">
-    <div class="reveal"><p class="sec-label">Producer Tools</p><h2 class="sec-title">Sample Packs</h2><div class="gold-line"></div></div>
+    <div class="reveal visible"><p class="sec-label">Producer Tools</p><h2 class="sec-title">Sample Packs</h2><div class="gold-line"></div></div>
     <div class="samples-grid">
-      <div class="sample-card reveal" onclick="addToCart({id:'s1',name:'ICY Drum Kit Vol.1',price:7,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🥁</span><h4>ICY Drum Kit Vol.1</h4><p>80 Samples · Trap / Drill</p><div class="sample-price">$7</div></div>
-      <div class="sample-card reveal" onclick="addToCart({id:'s2',name:'Golden Melodies',price:8,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🎹</span><h4>Golden Melodies</h4><p>50 Loops · Afrobeats / R&B</p><div class="sample-price">$8</div></div>
-      <div class="sample-card reveal" onclick="addToCart({id:'s3',name:'Vocal Chops Pack',price:6,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🎙️</span><h4>Vocal Chops Pack</h4><p>60 Chops · All Genres</p><div class="sample-price">$6</div></div>
-      <div class="sample-card reveal" onclick="addToCart({id:'s4',name:'Amapiano Essentials',price:10,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🌊</span><h4>Amapiano Essentials</h4><p>70 Samples · Log Drum / Piano</p><div class="sample-price">$10</div></div>
-      <div class="sample-card reveal" onclick="addToCart({id:'s5',name:'FX & Transitions',price:5,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">⚡</span><h4>FX & Transitions</h4><p>100 FX · Riser / Downlifter</p><div class="sample-price">$5</div></div>
-      <div class="sample-card reveal" onclick="addToCart({id:'s6',name:'Bass & 808 Kit',price:7,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🎸</span><h4>Bass & 808 Kit</h4><p>65 Samples · Heavy Bass</p><div class="sample-price">$7</div></div>
+      <div class="sample-card reveal visible" onclick="addToCart({id:'s1',name:'ICY Drum Kit Vol.1',price:7,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🥁</span><h4>ICY Drum Kit Vol.1</h4><p>80 Samples · Trap / Drill</p><div class="sample-price">$7</div></div>
+      <div class="sample-card reveal visible" onclick="addToCart({id:'s2',name:'Golden Melodies',price:8,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🎹</span><h4>Golden Melodies</h4><p>50 Loops · Afrobeats / R&B</p><div class="sample-price">$8</div></div>
+      <div class="sample-card reveal visible" onclick="addToCart({id:'s3',name:'Vocal Chops Pack',price:6,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🎙️</span><h4>Vocal Chops Pack</h4><p>60 Chops · All Genres</p><div class="sample-price">$6</div></div>
+      <div class="sample-card reveal visible" onclick="addToCart({id:'s4',name:'Amapiano Essentials',price:10,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🌊</span><h4>Amapiano Essentials</h4><p>70 Samples · Log Drum / Piano</p><div class="sample-price">$10</div></div>
+      <div class="sample-card reveal visible" onclick="addToCart({id:'s5',name:'FX & Transitions',price:5,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">⚡</span><h4>FX & Transitions</h4><p>100 FX · Riser / Downlifter</p><div class="sample-price">$5</div></div>
+      <div class="sample-card reveal visible" onclick="addToCart({id:'s6',name:'Bass & 808 Kit',price:7,type:'Sample Pack',lic:'Producer License'})"><span class="sample-icon">🎸</span><h4>Bass & 808 Kit</h4><p>65 Samples · Heavy Bass</p><div class="sample-price">$7</div></div>
     </div>
   </div>
 </section>
@@ -1947,7 +1944,28 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
-
+    from_name:   name,
+    reply_to:    email||STUDIO_EMAIL,
+    buyer_name:  name,
+    buyer_email: email||'(no email)',
+    pay_method:  svc,
+    order_ref:   'CONTACT',
+    order_items: svc,
+    order_total: '$0',
+    message:     'New contact form message from '+name+' ('+phone+'): '+msg
+  }).then(()=>{
+    toast('✓ Message sent! We\'ll be in touch soon.');
+    document.getElementById('f-name').value='';
+    document.getElementById('f-email').value='';
+    document.getElementById('f-phone').value='';
+    document.getElementById('f-svc').value='';
+    document.getElementById('f-msg').value='';
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  }).catch(()=>{
+    toast('⚠️ Could not send via email. Please contact us directly.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  });
+}
 </script>
 </body>
 </html>

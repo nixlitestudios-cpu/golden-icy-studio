@@ -6,7 +6,6 @@
 <title>Golden Icy Studio | Beat Production</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -928,8 +927,6 @@ footer::before {
   .plan-price { font-size: 2.5rem !important; }
   .sec-title { font-size: clamp(2rem,8vw,3.5rem) !important; }
 }
-
-</style>
 
 </style>
 </head>
@@ -1969,7 +1966,28 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
-
+    from_name:   name,
+    reply_to:    email||STUDIO_EMAIL,
+    buyer_name:  name,
+    buyer_email: email||'(no email)',
+    pay_method:  svc,
+    order_ref:   'CONTACT',
+    order_items: svc,
+    order_total: '$0',
+    message:     'New contact form message from '+name+' ('+phone+'): '+msg
+  }).then(()=>{
+    toast('✓ Message sent! We\'ll be in touch soon.');
+    document.getElementById('f-name').value='';
+    document.getElementById('f-email').value='';
+    document.getElementById('f-phone').value='';
+    document.getElementById('f-svc').value='';
+    document.getElementById('f-msg').value='';
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  }).catch(()=>{
+    toast('⚠️ Could not send via email. Please contact us directly.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  });
+}
 </script>
 </body>
 </html>

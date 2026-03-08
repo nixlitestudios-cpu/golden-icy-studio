@@ -6,7 +6,6 @@
 <title>Book a Session | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -930,8 +929,6 @@ footer::before {
 }
 
 </style>
-
-</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -1232,11 +1229,11 @@ footer::before {
 
 
 <!-- BOOKING -->
-<section id="booking">
+<section id="booking" style="padding-top:100px">
   <div class="section-wrap">
-    <div class="reveal"><p class="sec-label">Reserve Your Spot</p><h2 class="sec-title">Book A Session</h2><div class="gold-line"></div></div>
+    <div><p class="sec-label">Reserve Your Spot</p><h2 class="sec-title">Book A Session</h2><div class="gold-line"></div></div>
     <div class="booking-grid">
-      <div class="reveal-l">
+      <div class="reveal-l visible">
         <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;color:var(--gold-l);margin-bottom:1rem">Pick A Date</h3>
         <div id="calendar">
           <div class="cal-header"><button class="cal-nav" onclick="calPrev()">‹</button><h4 id="cal-title"></h4><button class="cal-nav" onclick="calNext()">›</button></div>
@@ -1255,7 +1252,7 @@ footer::before {
           <button class="time-slot" onclick="selTime(this,'17:00')">17:00</button>
         </div>
       </div>
-      <div class="reveal-r">
+      <div class="reveal-r visible">
         <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;color:var(--gold-l);margin-bottom:1.5rem">Session Details</h3>
         <div class="form-group"><label>Full Name</label><input type="text" id="bk-name" placeholder="Your name"/></div>
         <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="bk-phone" placeholder="071 000 0000"/></div>
@@ -1994,7 +1991,28 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
-
+    from_name:   name,
+    reply_to:    email||STUDIO_EMAIL,
+    buyer_name:  name,
+    buyer_email: email||'(no email)',
+    pay_method:  svc,
+    order_ref:   'CONTACT',
+    order_items: svc,
+    order_total: '$0',
+    message:     'New contact form message from '+name+' ('+phone+'): '+msg
+  }).then(()=>{
+    toast('✓ Message sent! We\'ll be in touch soon.');
+    document.getElementById('f-name').value='';
+    document.getElementById('f-email').value='';
+    document.getElementById('f-phone').value='';
+    document.getElementById('f-svc').value='';
+    document.getElementById('f-msg').value='';
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  }).catch(()=>{
+    toast('⚠️ Could not send via email. Please contact us directly.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  });
+}
 </script>
 </body>
 </html>

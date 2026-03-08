@@ -6,7 +6,6 @@
 <title>Pricing | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -930,8 +929,6 @@ footer::before {
 }
 
 </style>
-
-</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -1232,35 +1229,35 @@ footer::before {
 
 
 <!-- PURCHASE -->
-<section id="purchase">
+<section id="purchase" style="padding-top:100px">
   <div class="section-wrap">
-    <div class="reveal"><p class="sec-label">Get The Music</p><h2 class="sec-title">Purchase & Licensing</h2><div class="gold-line"></div></div>
-    <div class="pricing-toggle reveal">
+    <div class="reveal visible"><p class="sec-label">Get The Music</p><h2 class="sec-title">Purchase & Licensing</h2><div class="gold-line"></div></div>
+    <div class="pricing-toggle reveal visible">
       <span class="toggle-label active" id="tl-m">Monthly</span>
       <div class="toggle-sw" id="p-toggle" onclick="togglePricing()"></div>
       <span class="toggle-label" id="tl-a">Annual <span style="color:var(--gold);font-size:.65rem"> SAVE 20%</span></span>
     </div>
     <div class="plans-grid">
-      <div class="plan-card reveal">
+      <div class="plan-card reveal visible">
         <div class="plan-icon">🎵</div><div class="plan-name">Basic License</div>
         <div class="plan-price" data-m="$8" data-a="$6">$8 <span>/ beat</span></div>
         <ul class="plan-features"><li>MP3 + WAV files</li><li>Up to 10,000 streams</li><li>Non-exclusive rights</li><li>1 song use only</li><li>Credit required</li></ul>
         <button class="btn-ice" style="width:100%;justify-content:center;padding:.85rem" onclick="addToCart({id:'pl1',name:'Basic Beat License',price:8,type:'License',lic:'Basic License'})">🛒 Buy Now</button>
       </div>
-      <div class="plan-card featured reveal">
+      <div class="plan-card featured reveal visible">
         <div class="plan-badge">Most Popular</div>
         <div class="plan-icon">⭐</div><div class="plan-name">Premium License</div>
         <div class="plan-price" data-m="$19" data-a="$15">$19 <span>/ beat</span></div>
         <ul class="plan-features"><li>Unlimited streams</li><li>MP3, WAV & Stems</li><li>Commercial use allowed</li><li>Radio & distribution ready</li><li>No credit required</li></ul>
         <button class="btn-gold" style="width:100%;justify-content:center;padding:.85rem" onclick="addToCart({id:'pl2',name:'Premium Beat License',price:19,type:'License',lic:'Premium License'})">🛒 Buy Now</button>
       </div>
-      <div class="plan-card reveal">
+      <div class="plan-card reveal visible">
         <div class="plan-icon">♾️</div><div class="plan-name">Unlimited Sub</div>
         <div class="plan-price" data-m="$44" data-a="$35">$44 <span>/ month</span></div>
         <ul class="plan-features"><li>Unlimited beat downloads</li><li>Full stems on all beats</li><li>Exclusive monthly drops</li><li>Priority support</li><li>Early access</li></ul>
         <button class="btn-ice" style="width:100%;justify-content:center;padding:.85rem" onclick="addToCart({id:'pl3',name:'Monthly Subscription',price:44,type:'Subscription',lic:'Unlimited'})">🛒 Subscribe</button>
       </div>
-      <div class="plan-card reveal">
+      <div class="plan-card reveal visible">
         <div class="plan-icon">🎙️</div><div class="plan-name">Studio Session</div>
         <div class="plan-price" data-m="$28" data-a="$22">$28 <span>/ hr</span></div>
         <ul class="plan-features"><li>Professional engineer included</li><li>Recording & mixing</li><li>Same-day rough mix</li><li>Min. 2hr booking</li><li>Free consultation</li></ul>
@@ -1971,7 +1968,28 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
-
+    from_name:   name,
+    reply_to:    email||STUDIO_EMAIL,
+    buyer_name:  name,
+    buyer_email: email||'(no email)',
+    pay_method:  svc,
+    order_ref:   'CONTACT',
+    order_items: svc,
+    order_total: '$0',
+    message:     'New contact form message from '+name+' ('+phone+'): '+msg
+  }).then(()=>{
+    toast('✓ Message sent! We\'ll be in touch soon.');
+    document.getElementById('f-name').value='';
+    document.getElementById('f-email').value='';
+    document.getElementById('f-phone').value='';
+    document.getElementById('f-svc').value='';
+    document.getElementById('f-msg').value='';
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  }).catch(()=>{
+    toast('⚠️ Could not send via email. Please contact us directly.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  });
+}
 </script>
 </body>
 </html>

@@ -6,7 +6,6 @@
 <title>Beats | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
-<style>
 :root{
   --gold:#c9a84c;--gold-l:#f0d47a;--gold-d:#7a5c1e;
   --ice:#a8dff5;--ice-l:#d6f0fb;--ice-d:#4aa8d0;
@@ -930,8 +929,6 @@ footer::before {
 }
 
 </style>
-
-</style>
 </head>
 <body>
 <!-- LOADER -->
@@ -947,9 +944,6 @@ footer::before {
   <div class="lb-info"><span id="lb-cap"></span></div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
-<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <!-- CART OVERLAY -->
 <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
@@ -1230,15 +1224,16 @@ footer::before {
   <div class="page-dot" data-page="ask"><span class="dot-tip">Contact</span></div>
 </div>
 
+<div class="page-wrapper page-active" id="page-beats">
 
-<section id="portfolio">
+<section id="portfolio" style="padding-top:80px">
   <div class="section-wrap">
-    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem">
+    <div class="" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem">
       <div><p class="sec-label">Latest Drops</p><h2 class="sec-title">Beats</h2><div class="gold-line" style="margin-bottom:0"></div></div>
       <a href="https://youtube.com/@icybeats.n" target="_blank" class="btn-ice btn-sm">Full Channel ↗</a>
     </div>
     <div class="beats-grid">
-      <div class="beat-card reveal">
+      <div class="beat-card">
         <div class="beat-thumb" id="bt1" onclick="playBeat('1','0DDJuGqGdfY')">
           <img src="https://img.youtube.com/vi/0DDJuGqGdfY/hqdefault.jpg" alt="[FREE] MELODIC DRILL TYPE BEAT_STRING_MELODY_GUITER TYPE BEAT"/>
           <div class="beat-thumb-overlay"><button class="yt-btn">▶</button></div>
@@ -1257,7 +1252,7 @@ footer::before {
           </div>
         </div>
       </div>
-      <div class="beat-card reveal">
+      <div class="beat-card">
         <div class="beat-thumb" id="bt2" onclick="playBeat('2','OrL8x8Y6mKw')">
           <img src="https://img.youtube.com/vi/OrL8x8Y6mKw/hqdefault.jpg" alt="[FREE] DIFFERENT_SPECIES_REMAKE_HIPHOP_TYPE_BEAT"/>
           <div class="beat-thumb-overlay"><button class="yt-btn">▶</button></div>
@@ -1276,7 +1271,7 @@ footer::before {
           </div>
         </div>
       </div>
-      <div class="beat-card reveal">
+      <div class="beat-card">
         <div class="beat-thumb" id="bt3" onclick="playBeat('3','0GqbEHqTTmc')">
           <img src="https://img.youtube.com/vi/0GqbEHqTTmc/hqdefault.jpg" alt="[FREE] MELODIC_DRILL_TYPE_BEAT__MANDEM__(VIOLIN TYPE BEAT)"/>
           <div class="beat-thumb-overlay"><button class="yt-btn">▶</button></div>
@@ -1302,9 +1297,9 @@ footer::before {
 <!-- MP3 UPLOAD -->
 <section id="mp3upload">
   <div class="section-wrap">
-    <div class="reveal"><p class="sec-label">Direct Upload</p><h2 class="sec-title">Upload Beats</h2><div class="gold-line"></div>
+    <div class=""><p class="sec-label">Direct Upload</p><h2 class="sec-title">Upload Beats</h2><div class="gold-line"></div>
     <p style="font-size:.83rem;opacity:.6;max-width:550px;line-height:1.9;margin-bottom:2rem">Upload MP3 or WAV files directly. Visitors can preview and play your beats before purchasing.</p></div>
-    <div class="mp3-drop reveal" id="mp3-zone" onclick="document.getElementById('mp3-input').click()" ondragover="mp3DO(event)" ondragleave="mp3DL(event)" ondrop="mp3Drop(event)">
+    <div class="mp3-drop" id="mp3-zone" onclick="document.getElementById('mp3-input').click()" ondragover="mp3DO(event)" ondragleave="mp3DL(event)" ondrop="mp3Drop(event)">
       <input type="file" id="mp3-input" accept=".mp3,.wav,audio/*" multiple onchange="loadMP3s(this.files)"/>
       <div class="mp3-drop-icon">🎵</div>
       <h3>Drop Beats Here</h3>
@@ -1317,22 +1312,6 @@ footer::before {
   </div>
 </section>
 
-<section id="mp3upload">
-  <div class="section-wrap">
-    <div class="reveal"><p class="sec-label">Direct Upload</p><h2 class="sec-title">Upload Beats</h2><div class="gold-line"></div>
-    <p style="font-size:.83rem;opacity:.6;max-width:550px;line-height:1.9;margin-bottom:2rem">Upload MP3 or WAV files directly. Visitors can preview and play your beats before purchasing.</p></div>
-    <div class="mp3-drop reveal" id="mp3-zone" onclick="document.getElementById('mp3-input').click()" ondragover="mp3DO(event)" ondragleave="mp3DL(event)" ondrop="mp3Drop(event)">
-      <input type="file" id="mp3-input" accept=".mp3,.wav,audio/*" multiple onchange="loadMP3s(this.files)"/>
-      <div class="mp3-drop-icon">🎵</div>
-      <h3>Drop Beats Here</h3>
-      <p>Click to browse · MP3 & WAV supported</p>
-      <span class="btn-gold" style="pointer-events:none">Choose Files</span>
-    </div>
-    <div class="mp3-list" id="mp3-list">
-      <div class="mp3-empty" id="mp3-empty">No beats uploaded yet — add your first one above ↑</div>
-    </div>
-  </div>
-</section>
 
 
 <!-- FOOTER -->
@@ -1366,6 +1345,7 @@ footer::before {
   </div>
 </footer>
 
+</div><!-- /.page-wrapper -->
 
 <div id="toast"></div>
 <button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
@@ -1999,13 +1979,13 @@ function submitBooking(){
   document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
   document.getElementById('bk-sum').style.display='none';
 }
-renderCal();
+if(document.getElementById('cal-title')) renderCal();
 
 // ── TESTIMONIALS ──
 let tIdx=0;
 const tTrack=document.getElementById('ttrack');
 function slideT(dir){
-  const items=tTrack.querySelectorAll('.testimonial');
+  if(!tTrack) return;
   tIdx=Math.max(0,Math.min(items.length-1,tIdx+dir));
   tTrack.style.transform=`translateX(-${tIdx*100}%)`;
   tTrack.style.transition='transform .5s ease';
@@ -2034,7 +2014,29 @@ function submitContact(){
   emailjs.send(EJS_SERVICE_ID, EJS_TPL_PAYMENT, {
     to_email:    STUDIO_EMAIL,
     to_name:     'Golden Icy Studio',
-
+    from_name:   name,
+    reply_to:    email,
+    buyer_name:  name,
+    buyer_email: email,
+    pay_method:  svc,
+    order_ref:   'CONTACT-' + Date.now(),
+    order_items: svc,
+    order_total: 'N/A',
+    message:     msg
+  }).then(function(){
+    toast('✓ Message sent! We\'ll get back to you soon.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+    document.getElementById('f-name').value='';
+    document.getElementById('f-email').value='';
+    if(document.getElementById('f-phone')) document.getElementById('f-phone').value='';
+    document.getElementById('f-svc').value='';
+    document.getElementById('f-msg').value='';
+  }).catch(function(err){
+    console.error('EmailJS error:',err);
+    toast('⚠️ Failed to send. Please try WhatsApp or email directly.');
+    if(btn){btn.textContent='Send Message';btn.disabled=false;}
+  });
+}
 </script>
 </body>
 </html>
