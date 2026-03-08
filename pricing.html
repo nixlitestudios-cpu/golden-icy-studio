@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Golden Icy Studio | Beat Production</title>
+<title>Pricing | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
 <style>
@@ -1231,45 +1231,47 @@ footer::before {
 </div>
 
 
-<section id="home">
-  <div class="hero-bg-img"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-grid"></div>
-  <canvas id="particles-canvas"></canvas>
-  <div class="hero-content">
-    <div class="hero-eyebrow">🎵 Professional Beat Production Studio</div>
-    <h1 class="hero-title"><span class="g">GOLDEN</span><span class="i">ICY</span></h1>
-    <p class="hero-sub">Where Gold Meets Ice — Crafting Sounds That Move The World</p>
-    <div class="hero-div"></div>
-    <div class="hero-btns">
-      <a href="beats.html" class="btn-gold">🎵 Browse Beats</a>
-      <a href="booking.html" class="btn-ice">📅 Book Session</a>
-      <button class="btn-ice" onclick="openAuth()">👤 Login / Sign Up</button>
+<!-- PURCHASE -->
+<section id="purchase">
+  <div class="section-wrap">
+    <div class="reveal"><p class="sec-label">Get The Music</p><h2 class="sec-title">Purchase & Licensing</h2><div class="gold-line"></div></div>
+    <div class="pricing-toggle reveal">
+      <span class="toggle-label active" id="tl-m">Monthly</span>
+      <div class="toggle-sw" id="p-toggle" onclick="togglePricing()"></div>
+      <span class="toggle-label" id="tl-a">Annual <span style="color:var(--gold);font-size:.65rem"> SAVE 20%</span></span>
     </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><h4>200+</h4><p>Beats</p></div>
-      <div class="hero-stat"><h4>50+</h4><p>Artists</p></div>
-      <div class="hero-stat"><h4>5★</h4><p>Rating</p></div>
-      <div class="hero-stat"><h4>3+</h4><p>Years</p></div>
+    <div class="plans-grid">
+      <div class="plan-card reveal">
+        <div class="plan-icon">🎵</div><div class="plan-name">Basic License</div>
+        <div class="plan-price" data-m="$8" data-a="$6">$8 <span>/ beat</span></div>
+        <ul class="plan-features"><li>MP3 + WAV files</li><li>Up to 10,000 streams</li><li>Non-exclusive rights</li><li>1 song use only</li><li>Credit required</li></ul>
+        <button class="btn-ice" style="width:100%;justify-content:center;padding:.85rem" onclick="addToCart({id:'pl1',name:'Basic Beat License',price:8,type:'License',lic:'Basic License'})">🛒 Buy Now</button>
+      </div>
+      <div class="plan-card featured reveal">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-icon">⭐</div><div class="plan-name">Premium License</div>
+        <div class="plan-price" data-m="$19" data-a="$15">$19 <span>/ beat</span></div>
+        <ul class="plan-features"><li>Unlimited streams</li><li>MP3, WAV & Stems</li><li>Commercial use allowed</li><li>Radio & distribution ready</li><li>No credit required</li></ul>
+        <button class="btn-gold" style="width:100%;justify-content:center;padding:.85rem" onclick="addToCart({id:'pl2',name:'Premium Beat License',price:19,type:'License',lic:'Premium License'})">🛒 Buy Now</button>
+      </div>
+      <div class="plan-card reveal">
+        <div class="plan-icon">♾️</div><div class="plan-name">Unlimited Sub</div>
+        <div class="plan-price" data-m="$44" data-a="$35">$44 <span>/ month</span></div>
+        <ul class="plan-features"><li>Unlimited beat downloads</li><li>Full stems on all beats</li><li>Exclusive monthly drops</li><li>Priority support</li><li>Early access</li></ul>
+        <button class="btn-ice" style="width:100%;justify-content:center;padding:.85rem" onclick="addToCart({id:'pl3',name:'Monthly Subscription',price:44,type:'Subscription',lic:'Unlimited'})">🛒 Subscribe</button>
+      </div>
+      <div class="plan-card reveal">
+        <div class="plan-icon">🎙️</div><div class="plan-name">Studio Session</div>
+        <div class="plan-price" data-m="$28" data-a="$22">$28 <span>/ hr</span></div>
+        <ul class="plan-features"><li>Professional engineer included</li><li>Recording & mixing</li><li>Same-day rough mix</li><li>Min. 2hr booking</li><li>Free consultation</li></ul>
+        <a href="booking.html" class="btn-ice" style="display:flex;width:100%;justify-content:center;padding:.85rem">📅 Book Now</a>
+      </div>
     </div>
   </div>
-  <div class="scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span class="ticker-item">Beat Production</span><span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Recording Sessions</span><span class="ticker-item">Sample Packs</span><span class="ticker-item">Golden Icy Studio</span><span class="ticker-item">Amapiano</span><span class="ticker-item">Afrobeats</span><span class="ticker-item">Hip-Hop</span><span class="ticker-item">Trap</span><span class="ticker-item">Drill</span><span class="ticker-item">R&amp;B</span><span class="ticker-item">Beat Production</span><span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Recording Sessions</span><span class="ticker-item">Sample Packs</span><span class="ticker-item">Golden Icy Studio</span><span class="ticker-item">Amapiano</span><span class="ticker-item">Afrobeats</span><span class="ticker-item">Hip-Hop</span><span class="ticker-item">Trap</span><span class="ticker-item">Drill</span><span class="ticker-item">R&amp;B</span>
-  </div>
-</div>
 
-<div class="ticker-wrap"><div class="ticker">
-          <span class="ticker-item">Beat Production</span><span class="ticker-item">Recording Studio</span>
-          <span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Custom Beats</span>
-          <span class="ticker-item">Sample Packs</span><span class="ticker-item">Golden Icy Studio</span>
-          <span class="ticker-item">Beat Production</span><span class="ticker-item">Recording Studio</span>
-          <span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Custom Beats</span>
-        </div></div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-top">

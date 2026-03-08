@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Golden Icy Studio | Beat Production</title>
+<title>Book a Session | Golden Icy Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Exo+2:wght@100;200;300;400;500&display=swap" rel="stylesheet"/>
 <style>
 <style>
@@ -1231,45 +1231,70 @@ footer::before {
 </div>
 
 
-<section id="home">
-  <div class="hero-bg-img"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-grid"></div>
-  <canvas id="particles-canvas"></canvas>
-  <div class="hero-content">
-    <div class="hero-eyebrow">🎵 Professional Beat Production Studio</div>
-    <h1 class="hero-title"><span class="g">GOLDEN</span><span class="i">ICY</span></h1>
-    <p class="hero-sub">Where Gold Meets Ice — Crafting Sounds That Move The World</p>
-    <div class="hero-div"></div>
-    <div class="hero-btns">
-      <a href="beats.html" class="btn-gold">🎵 Browse Beats</a>
-      <a href="booking.html" class="btn-ice">📅 Book Session</a>
-      <button class="btn-ice" onclick="openAuth()">👤 Login / Sign Up</button>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><h4>200+</h4><p>Beats</p></div>
-      <div class="hero-stat"><h4>50+</h4><p>Artists</p></div>
-      <div class="hero-stat"><h4>5★</h4><p>Rating</p></div>
-      <div class="hero-stat"><h4>3+</h4><p>Years</p></div>
+<!-- BOOKING -->
+<section id="booking">
+  <div class="section-wrap">
+    <div class="reveal"><p class="sec-label">Reserve Your Spot</p><h2 class="sec-title">Book A Session</h2><div class="gold-line"></div></div>
+    <div class="booking-grid">
+      <div class="reveal-l">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;color:var(--gold-l);margin-bottom:1rem">Pick A Date</h3>
+        <div id="calendar">
+          <div class="cal-header"><button class="cal-nav" onclick="calPrev()">‹</button><h4 id="cal-title"></h4><button class="cal-nav" onclick="calNext()">›</button></div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </div>
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;color:var(--gold-l);margin-top:1.5rem;margin-bottom:1rem">Pick A Time</h3>
+        <div class="time-slots">
+          <button class="time-slot" onclick="selTime(this,'09:00')">09:00</button>
+          <button class="time-slot" onclick="selTime(this,'10:00')">10:00</button>
+          <button class="time-slot" onclick="selTime(this,'11:00')">11:00</button>
+          <button class="time-slot" onclick="selTime(this,'12:00')">12:00</button>
+          <button class="time-slot" onclick="selTime(this,'13:00')">13:00</button>
+          <button class="time-slot" onclick="selTime(this,'14:00')">14:00</button>
+          <button class="time-slot" onclick="selTime(this,'15:00')">15:00</button>
+          <button class="time-slot" onclick="selTime(this,'16:00')">16:00</button>
+          <button class="time-slot" onclick="selTime(this,'17:00')">17:00</button>
+        </div>
+      </div>
+      <div class="reveal-r">
+        <h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.1em;color:var(--gold-l);margin-bottom:1.5rem">Session Details</h3>
+        <div class="form-group"><label>Full Name</label><input type="text" id="bk-name" placeholder="Your name"/></div>
+        <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="bk-phone" placeholder="071 000 0000"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="bk-email" placeholder="your@email.com"/></div>
+        <div class="form-group"><label>Session Type</label>
+          <select id="bk-type" onchange="updateBkSummary()">
+            <option value="">— Select Session —</option>
+            <option value="Recording:28">Recording ($28/hr)</option>
+            <option value="Mixing:22">Mixing ($22/hr)</option>
+            <option value="Mastering:17">Mastering ($17/hr)</option>
+            <option value="Beat Production:33">Beat Production ($33/hr)</option>
+            <option value="Full Package:44">Full Package ($44/hr)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Duration (hours)</label>
+          <select id="bk-dur" onchange="updateBkSummary()">
+            <option value="2">2 hours (minimum)</option>
+            <option value="3">3 hours</option>
+            <option value="4">4 hours</option>
+            <option value="5">5 hours</option>
+            <option value="8">Full Day (8 hours)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Notes</label><textarea id="bk-notes" placeholder="Tell us what you are working on…"></textarea></div>
+        <div class="booking-summary-box" id="bk-sum">
+          <h4>📋 Booking Summary</h4>
+          <p id="bks-date">📅 Date: Not selected</p>
+          <p id="bks-time">⏰ Time: Not selected</p>
+          <p id="bks-type">🎵 Session: Not selected</p>
+          <p id="bks-total" style="color:var(--gold-l);margin-top:.5rem;font-weight:400">💰 Estimated: R0</p>
+        </div>
+        <button class="btn-gold" style="width:100%;justify-content:center;padding:1rem" onclick="submitBooking()">📅 Confirm Booking</button>
+      </div>
     </div>
   </div>
-  <div class="scroll-indicator"><span>Scroll</span><div class="scroll-line"></div></div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker-wrap">
-  <div class="ticker">
-    <span class="ticker-item">Beat Production</span><span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Recording Sessions</span><span class="ticker-item">Sample Packs</span><span class="ticker-item">Golden Icy Studio</span><span class="ticker-item">Amapiano</span><span class="ticker-item">Afrobeats</span><span class="ticker-item">Hip-Hop</span><span class="ticker-item">Trap</span><span class="ticker-item">Drill</span><span class="ticker-item">R&amp;B</span><span class="ticker-item">Beat Production</span><span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Recording Sessions</span><span class="ticker-item">Sample Packs</span><span class="ticker-item">Golden Icy Studio</span><span class="ticker-item">Amapiano</span><span class="ticker-item">Afrobeats</span><span class="ticker-item">Hip-Hop</span><span class="ticker-item">Trap</span><span class="ticker-item">Drill</span><span class="ticker-item">R&amp;B</span>
-  </div>
-</div>
 
-<div class="ticker-wrap"><div class="ticker">
-          <span class="ticker-item">Beat Production</span><span class="ticker-item">Recording Studio</span>
-          <span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Custom Beats</span>
-          <span class="ticker-item">Sample Packs</span><span class="ticker-item">Golden Icy Studio</span>
-          <span class="ticker-item">Beat Production</span><span class="ticker-item">Recording Studio</span>
-          <span class="ticker-item">Mixing & Mastering</span><span class="ticker-item">Custom Beats</span>
-        </div></div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-top">
