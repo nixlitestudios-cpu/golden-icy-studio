@@ -51,10 +51,37 @@ nav.scrolled{background:rgba(6,8,16,.96);backdrop-filter:blur(20px);padding:.7re
 .hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
 .hamburger.open span:nth-child(2){opacity:0}
 .hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
-.mobile-nav{display:none;position:fixed;inset:0;background:rgba(6,8,16,.98);z-index:499;flex-direction:column;align-items:center;justify-content:center;gap:1.8rem}
+.mobile-nav{display:none;position:fixed;inset:0;background:rgba(6,8,16,.98);z-index:501;flex-direction:column;align-items:center;justify-content:center;gap:1.8rem}
 .mobile-nav.open{display:flex}
 .mobile-nav a{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.15em;color:var(--wht);text-decoration:none;opacity:.7;transition:all .3s}
 .mobile-nav a:hover{opacity:1;color:var(--gold-l)}
+
+/* ── PAGE ROUTING ── */
+.page-wrapper{display:none;min-height:calc(100vh - 70px);will-change:transform,opacity,filter}
+.page-wrapper.page-active{display:block;animation:pageZoomIn .5s cubic-bezier(.22,1,.36,1) both}
+.page-wrapper.page-leaving{animation:pageZoomOut .25s cubic-bezier(.55,0,1,.45) both;pointer-events:none}
+@keyframes pageZoomIn{
+  from{opacity:0;transform:scale(1.06);filter:blur(12px)}
+  to  {opacity:1;transform:scale(1);  filter:blur(0px)}
+}
+@keyframes pageZoomOut{
+  from{opacity:1;transform:scale(1);   filter:blur(0px)}
+  to  {opacity:0;transform:scale(.94); filter:blur(14px)}
+}
+
+/* BREADCRUMB */
+.breadcrumb{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:300;display:flex;align-items:center;gap:.5rem;background:rgba(6,8,16,.88);backdrop-filter:blur(20px);border:1px solid rgba(201,168,76,.15);padding:.45rem 1.1rem;pointer-events:none}
+.breadcrumb span{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(240,244,255,.3)}
+.breadcrumb .bc-sep{color:rgba(201,168,76,.35);font-size:.6rem}
+.breadcrumb .bc-current{color:var(--gold-l);opacity:1}
+
+/* PAGE DOTS */
+.page-dots{position:fixed;right:1.4rem;top:50%;transform:translateY(-50%);z-index:300;display:flex;flex-direction:column;gap:.6rem}
+.page-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(201,168,76,.2);cursor:pointer;transition:all .3s;position:relative}
+.page-dot:hover,.page-dot.active{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(201,168,76,.6)}
+.page-dot .dot-tip{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:rgba(6,8,16,.92);border:1px solid rgba(201,168,76,.2);padding:.2rem .6rem;font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-l);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+.page-dot:hover .dot-tip{opacity:1}
+@media(max-width:900px){.page-dots,.breadcrumb{display:none}}
 
 /* HERO */
 #home{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -408,6 +435,499 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
 /* RESPONSIVE */
 @media(max-width:1024px){.about-grid,.ask-grid,.booking-grid,.footer-top{grid-template-columns:1fr;gap:2.5rem}.footer-top{grid-template-columns:1fr 1fr}}
 @media(max-width:768px){nav{padding:.8rem 1.5rem}.nav-links{display:none}.hamburger{display:flex}.section-wrap{padding:4rem 1.5rem}.hero-stats{gap:1.5rem}.footer-top{grid-template-columns:1fr}.gallery-item.wide{grid-column:span 1}#gallery-bg-item{grid-column:span 1}.mp3-card{grid-template-columns:auto 1fr}.booking-grid{grid-template-columns:1fr}}
+
+/* ═══════════════════════════════════════════
+   GOLDEN ICY STUDIO — VISUAL ENHANCEMENT PACK
+   ═══════════════════════════════════════════ */
+
+/* ── GLOBAL AMBIANCE ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 40% at 20% 10%, rgba(201,168,76,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(168,223,245,.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── ENHANCED NAV ── */
+nav {
+  background: linear-gradient(180deg, rgba(6,8,16,.6) 0%, transparent 100%);
+  backdrop-filter: blur(4px);
+}
+nav.scrolled {
+  background: rgba(6,8,16,.96) !important;
+  border-bottom: 1px solid rgba(201,168,76,.18) !important;
+  box-shadow: 0 4px 40px rgba(0,0,0,.6);
+}
+.logo-box {
+  background: linear-gradient(135deg, rgba(201,168,76,.15), rgba(168,223,245,.08)) !important;
+  position: relative;
+  overflow: hidden;
+}
+.logo-box::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(201,168,76,.15) 100%);
+}
+.nav-links a {
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), var(--ice));
+  transform: scaleX(0);
+  transition: transform .3s;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+
+/* ── ENHANCED LOADER ── */
+#loader {
+  background: radial-gradient(ellipse at center, #0d1020 0%, var(--blk) 100%) !important;
+}
+.loader-logo {
+  text-shadow: 0 0 80px rgba(201,168,76,.5);
+  letter-spacing: .15em !important;
+}
+
+/* ── HERO GLOW UPGRADE ── */
+.hero-title .g { filter: drop-shadow(0 0 80px rgba(201,168,76,.6)) !important; }
+.hero-title .i { filter: drop-shadow(0 0 80px rgba(168,223,245,.6)) !important; }
+.hero-eyebrow {
+  backdrop-filter: blur(12px);
+  background: rgba(168,223,245,.06) !important;
+}
+.hero-stat h4 {
+  filter: drop-shadow(0 0 20px rgba(201,168,76,.5));
+}
+
+/* ── SECTION LABELS UPGRADE ── */
+.sec-label {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  padding: .3rem .9rem;
+  background: rgba(201,168,76,.07);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 0;
+  letter-spacing: .5em;
+}
+.sec-label::before {
+  content: '◆';
+  font-size: .4rem;
+  color: var(--gold);
+}
+
+/* ── SERVICE CARDS UPGRADE ── */
+.svc-card {
+  background: linear-gradient(135deg, rgba(13,16,32,.95) 0%, rgba(28,34,53,.7) 100%) !important;
+  box-shadow: 0 4px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.04);
+}
+.svc-card:hover {
+  box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 40px rgba(201,168,76,.08) !important;
+}
+.svc-icon {
+  width: 56px;
+  height: 56px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(201,168,76,.12), rgba(168,223,245,.06));
+  border: 1px solid rgba(201,168,76,.2);
+  font-size: 1.5rem !important;
+  margin-bottom: 1.4rem !important;
+}
+.svc-card h3 {
+  font-size: 1.6rem !important;
+  background: linear-gradient(90deg, var(--gold-l), var(--ice-l));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.svc-card p {
+  font-size: .84rem !important;
+  line-height: 1.9 !important;
+  opacity: .72 !important;
+}
+
+/* ── BEAT CARDS UPGRADE ── */
+.beat-card {
+  background: linear-gradient(170deg, rgba(20,24,40,.98) 0%, rgba(13,16,32,1) 100%) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  transition: border-color .4s, transform .4s, box-shadow .4s !important;
+}
+.beat-card:hover {
+  box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 50px rgba(201,168,76,.1) !important;
+  transform: translateY(-8px) !important;
+}
+.yt-btn {
+  box-shadow: 0 0 50px rgba(201,168,76,.6) !important;
+  width: 64px !important;
+  height: 64px !important;
+}
+.beat-name {
+  background: linear-gradient(90deg, var(--wht) 60%, var(--gold-l) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.beat-wave span {
+  background: linear-gradient(180deg, var(--gold-l) 0%, var(--ice) 100%) !important;
+  opacity: .65 !important;
+}
+
+/* ── PLAN CARDS UPGRADE ── */
+.plan-card {
+  background: linear-gradient(170deg, rgba(20,24,40,.99) 0%, rgba(13,16,32,1) 100%) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,.4);
+  transition: transform .35s, box-shadow .35s !important;
+}
+.plan-card:hover {
+  box-shadow: 0 25px 70px rgba(0,0,0,.7), 0 0 60px rgba(201,168,76,.12) !important;
+  transform: translateY(-10px) !important;
+}
+.plan-card.featured {
+  background: linear-gradient(170deg, rgba(30,25,10,.98) 0%, rgba(20,24,40,.98) 100%) !important;
+  box-shadow: 0 0 80px rgba(201,168,76,.2), 0 20px 60px rgba(0,0,0,.6) !important;
+}
+.plan-price {
+  font-size: 3.2rem !important;
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--ice) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.plan-name {
+  font-size: 1.8rem !important;
+  letter-spacing: .12em !important;
+}
+.plan-features li::before {
+  color: var(--gold-l) !important;
+}
+
+/* ── SAMPLE CARDS UPGRADE ── */
+.sample-card {
+  background: linear-gradient(135deg, rgba(20,24,40,.95) 0%, rgba(28,34,53,.8) 100%) !important;
+  box-shadow: 0 4px 30px rgba(0,0,0,.4);
+  border: 1px solid rgba(168,223,245,.12) !important;
+  transition: all .4s !important;
+}
+.sample-card:hover {
+  box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 40px rgba(168,223,245,.12) !important;
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(168,223,245,.45) !important;
+}
+.sample-icon {
+  filter: drop-shadow(0 0 15px rgba(168,223,245,.4));
+}
+.sample-card h4 {
+  background: linear-gradient(90deg, var(--ice-l), var(--wht));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.sample-price {
+  background: linear-gradient(90deg, var(--gold), var(--gold-l));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+}
+
+/* ── BOOKING SECTION UPGRADE ── */
+.cal-header {
+  background: linear-gradient(135deg, rgba(28,34,53,.98), rgba(20,24,40,1)) !important;
+  border: 1px solid rgba(201,168,76,.2) !important;
+}
+.time-slot {
+  background: rgba(20,24,40,.5) !important;
+  backdrop-filter: blur(4px);
+}
+.time-slot:hover {
+  background: rgba(201,168,76,.1) !important;
+  box-shadow: 0 0 20px rgba(201,168,76,.15);
+}
+.time-slot.selected {
+  background: rgba(201,168,76,.18) !important;
+  box-shadow: 0 0 25px rgba(201,168,76,.2);
+}
+.booking-summary-box {
+  background: linear-gradient(135deg, rgba(201,168,76,.08), rgba(168,223,245,.04)) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,.3);
+}
+
+/* ── ABOUT SECTION UPGRADE ── */
+.about-center-el {
+  background: linear-gradient(135deg, rgba(201,168,76,.15), rgba(168,223,245,.08)) !important;
+  box-shadow: 0 0 100px rgba(201,168,76,.2), inset 0 0 60px rgba(168,223,245,.05) !important;
+}
+.stat h3 {
+  filter: drop-shadow(0 0 20px rgba(201,168,76,.4));
+}
+.testimonial {
+  background: linear-gradient(135deg, rgba(20,24,40,.98), rgba(28,34,53,.9)) !important;
+  box-shadow: 0 8px 40px rgba(0,0,0,.4);
+  border: 1px solid rgba(201,168,76,.12) !important;
+  transition: all .35s;
+}
+.testimonial:hover {
+  border-color: rgba(201,168,76,.3) !important;
+  box-shadow: 0 15px 50px rgba(0,0,0,.5) !important;
+}
+.stars { filter: drop-shadow(0 0 8px rgba(201,168,76,.6)); }
+
+/* ── CONTACT SECTION UPGRADE ── */
+.contact-row {
+  transition: all .3s;
+  padding: 1.2rem 0 !important;
+}
+.contact-row:hover { padding-left: .5rem !important; }
+.c-icon {
+  background: linear-gradient(135deg, rgba(201,168,76,.15), rgba(168,223,245,.08)) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  transition: transform .3s;
+}
+.contact-row:hover .c-icon { transform: scale(1.1) rotate(5deg); }
+.social-pill {
+  backdrop-filter: blur(8px);
+  background: rgba(20,24,40,.5) !important;
+}
+.social-pill:hover {
+  box-shadow: 0 8px 30px rgba(201,168,76,.2) !important;
+}
+
+/* ── FORM INPUTS UPGRADE ── */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: rgba(13,16,32,.6) !important;
+  backdrop-filter: blur(8px);
+  transition: border-color .3s, box-shadow .3s !important;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 20px rgba(201,168,76,.15), inset 0 0 20px rgba(201,168,76,.04);
+}
+
+/* ── BUTTONS UPGRADE ── */
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold-d) 0%, var(--gold) 50%, var(--gold-l) 100%) !important;
+  background-size: 200% auto !important;
+  transition: background-position .4s, transform .3s, box-shadow .3s !important;
+  position: relative;
+  overflow: hidden;
+}
+.btn-gold::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.15) 100%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.btn-gold:hover::after { opacity: 1; }
+.btn-gold:hover {
+  box-shadow: 0 12px 50px rgba(201,168,76,.7) !important;
+  transform: translateY(-3px) !important;
+}
+.btn-ice:hover {
+  box-shadow: 0 12px 40px rgba(168,223,245,.25) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* ── CART SIDEBAR UPGRADE ── */
+#cart-sidebar {
+  background: linear-gradient(170deg, rgba(13,16,32,.99), rgba(20,24,40,.98)) !important;
+  box-shadow: -20px 0 80px rgba(0,0,0,.8) !important;
+}
+.cart-item {
+  transition: background .3s;
+  border-radius: 0;
+  padding: 1.2rem 0 !important;
+}
+.cart-item:hover { background: rgba(201,168,76,.03); }
+.cart-item-img {
+  background: linear-gradient(135deg, rgba(201,168,76,.15), rgba(168,223,245,.08)) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+}
+
+/* ── FOOTER UPGRADE ── */
+footer {
+  background: linear-gradient(180deg, rgba(6,8,16,.98) 0%, #000 100%) !important;
+  position: relative;
+}
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--ice), transparent);
+}
+.footer-brand { filter: drop-shadow(0 0 30px rgba(201,168,76,.3)); }
+.footer-col a:hover { color: var(--gold-l) !important; letter-spacing: .18em !important; }
+
+/* ── TOAST UPGRADE ── */
+.toast {
+  border-left: 3px solid rgba(255,255,255,.3);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 40px rgba(0,0,0,.5);
+}
+
+/* ── GALLERY UPGRADE ── */
+.gallery-item {
+  background: var(--blk3) !important;
+  box-shadow: 0 4px 30px rgba(0,0,0,.5);
+  transition: transform .5s, box-shadow .5s, border-color .4s !important;
+}
+.gallery-item:hover {
+  border-color: rgba(201,168,76,.4) !important;
+  box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 0 40px rgba(201,168,76,.1) !important;
+  transform: translateY(-5px) !important;
+}
+
+/* ── SECTION BG ALTERNATION ── */
+#services { background: linear-gradient(180deg, rgba(13,16,32,1) 0%, rgba(10,12,24,1) 100%) !important; }
+#gallery  { background: linear-gradient(180deg, rgba(6,8,16,1) 0%, rgba(10,12,24,1) 100%) !important; }
+#portfolio{ background: linear-gradient(180deg, rgba(13,16,32,1) 0%, rgba(6,8,16,1) 100%) !important; }
+#samples  { background: linear-gradient(180deg, rgba(10,12,24,1) 0%, rgba(13,16,32,1) 100%) !important; }
+#purchase { background: linear-gradient(180deg, rgba(20,24,40,1) 0%, rgba(13,16,32,1) 100%) !important; }
+#booking  { background: linear-gradient(180deg, rgba(6,8,16,1) 0%, rgba(13,16,32,1) 100%) !important; }
+#about    { background: linear-gradient(180deg, rgba(13,16,32,1) 0%, rgba(6,8,16,1) 100%) !important; }
+#ask      { background: linear-gradient(180deg, rgba(20,24,40,1) 0%, rgba(13,16,32,1) 100%) !important; }
+
+/* ── GOLD LINE UPGRADE ── */
+.gold-line {
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--ice), rgba(168,223,245,0)) !important;
+  box-shadow: 0 0 15px rgba(201,168,76,.4);
+}
+
+/* ── SEC TITLE UPGRADE ── */
+.sec-title {
+  background: linear-gradient(90deg, var(--wht) 40%, var(--gold-l) 70%, var(--ice) 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  filter: drop-shadow(0 0 40px rgba(201,168,76,.15));
+}
+
+/* ── PAGE DOTS UPGRADE ── */
+.page-dot.active {
+  box-shadow: 0 0 12px rgba(201,168,76,.8) !important;
+  transform: scale(1.3);
+}
+
+/* ── MOBILE NAV UPGRADE ── */
+.mobile-nav {
+  background: linear-gradient(135deg, rgba(6,8,16,.99), rgba(13,16,32,.99)) !important;
+  backdrop-filter: blur(20px);
+}
+.mobile-nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(201,168,76,.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.mobile-nav a {
+  position: relative;
+  transition: all .35s !important;
+}
+.mobile-nav a:hover {
+  letter-spacing: .25em !important;
+  text-shadow: 0 0 30px rgba(201,168,76,.5);
+}
+
+/* ── TICKER UPGRADE ── */
+.ticker-wrap {
+  background: linear-gradient(90deg, var(--gold-d), var(--gold), var(--ice-d), var(--gold), var(--gold-d)) !important;
+  box-shadow: 0 4px 30px rgba(201,168,76,.3);
+}
+.ticker-item { letter-spacing: .25em !important; }
+
+/* ── MODAL UPGRADE ── */
+.modal {
+  background: linear-gradient(170deg, rgba(13,16,32,.99), rgba(20,24,40,.98)) !important;
+  box-shadow: 0 30px 100px rgba(0,0,0,.9), 0 0 60px rgba(201,168,76,.1) !important;
+}
+
+/* ── SCROLLBAR UPGRADE ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--blk); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--gold), var(--ice));
+  box-shadow: 0 0 8px rgba(201,168,76,.4);
+}
+
+/* ── SELECTION UPGRADE ── */
+::selection {
+  background: rgba(201,168,76,.3);
+  color: var(--gold-l);
+}
+
+/* ── ANIMATED GRADIENT BORDERS ── */
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 20px rgba(201,168,76,.15); }
+  50%       { box-shadow: 0 0 40px rgba(168,223,245,.2); }
+}
+.plan-card.featured { animation: borderGlow 4s ease-in-out infinite; }
+
+/* ── HERO SCROLL INDICATOR UPGRADE ── */
+.scroll-line {
+  background: linear-gradient(180deg, var(--gold), var(--ice), transparent) !important;
+  box-shadow: 0 0 12px rgba(201,168,76,.4);
+}
+
+/* ── BTT BUTTON UPGRADE ── */
+#btt {
+  background: linear-gradient(135deg, var(--gold-d), var(--gold)) !important;
+  box-shadow: 0 4px 25px rgba(201,168,76,.45) !important;
+}
+#btt:hover {
+  box-shadow: 0 12px 40px rgba(201,168,76,.7) !important;
+}
+
+/* ── MP3 CARDS UPGRADE ── */
+.mp3-card {
+  background: linear-gradient(135deg, rgba(20,24,40,.98), rgba(13,16,32,1)) !important;
+  box-shadow: 0 4px 30px rgba(0,0,0,.4);
+}
+.mp3-card:hover {
+  box-shadow: 0 15px 50px rgba(0,0,0,.6), 0 0 30px rgba(201,168,76,.08) !important;
+}
+.mp3-thumb-icon {
+  background: linear-gradient(135deg, rgba(201,168,76,.15), rgba(168,223,245,.08)) !important;
+}
+
+/* ── CHECKOUT STEPS UPGRADE ── */
+.checkout-step.active {
+  background: linear-gradient(90deg, rgba(201,168,76,.08), transparent);
+}
+
+/* ── MEDIA QUERIES FOR ENHANCEMENTS ── */
+@media(max-width:768px){
+  .svc-card { padding: 1.8rem 1.4rem !important; }
+  .plan-card { padding: 2rem 1.5rem !important; }
+  .plan-price { font-size: 2.5rem !important; }
+  .sec-title { font-size: clamp(2rem,8vw,3.5rem) !important; }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
@@ -630,7 +1150,7 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
           Your license will be sent to your email within 24 hours.<br/><br/>
           For quick delivery contact us on:<br/>
           📞 <strong>+263 71 458 7544</strong><br/>
-          ✉️ <strong>goldenicystudio@gmail.com</strong></p>
+          ✉️ <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="197e76757d7c77707a606a6d6c7d7076597e74787075377a7674">[email&#160;protected]</a></strong></p>
           <button class="btn-gold" style="margin-top:1.5rem" onclick="finishCheckout()">Done 🎵</button>
         </div>
       </div>
@@ -640,16 +1160,16 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
 
 <!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobile-nav">
-  <a href="#home" onclick="closeMob()">Home</a>
-  <a href="#services" onclick="closeMob()">Services</a>
-  <a href="#gallery" onclick="closeMob()">Photos</a>
-  <a href="#portfolio" onclick="closeMob()">Beats</a>
-  <a href="#mp3upload" onclick="closeMob()">Upload</a>
-  <a href="#samples" onclick="closeMob()">Samples</a>
-  <a href="#purchase" onclick="closeMob()">Purchase</a>
-  <a href="#booking" onclick="closeMob()">Book</a>
-  <a href="#about" onclick="closeMob()">About</a>
-  <a href="#ask" onclick="closeMob()">Contact</a>
+  <button onclick="closeMob()" style="position:absolute;top:1.5rem;right:1.8rem;background:none;border:none;color:var(--gold);font-size:1.6rem;cursor:pointer;opacity:.6;transition:opacity .3s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity='.6'">✕</button>
+  <a href="#home" data-page="home" onclick="navigateTo('home');closeMob()">Home</a>
+  <a href="#services" data-page="services" onclick="navigateTo('services');closeMob()">Services</a>
+  <a href="#gallery" data-page="gallery" onclick="navigateTo('gallery');closeMob()">Gallery</a>
+  <a href="#portfolio" data-page="portfolio" onclick="navigateTo('portfolio');closeMob()">Beats</a>
+  <a href="#samples" data-page="samples" onclick="navigateTo('samples');closeMob()">Samples</a>
+  <a href="#purchase" data-page="purchase" onclick="navigateTo('purchase');closeMob()">Pricing</a>
+  <a href="#booking" data-page="booking" onclick="navigateTo('booking');closeMob()">Book</a>
+  <a href="#about" data-page="about" onclick="navigateTo('about');closeMob()">About</a>
+  <a href="#ask" data-page="ask" onclick="navigateTo('ask');closeMob()">Contact</a>
 </div>
 
 <!-- NAV -->
@@ -659,12 +1179,14 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
     <div class="logo-name"><span class="g">Golden</span><span class="s">ICY STUDIO</span></div>
   </a>
   <ul class="nav-links">
-    <li><a href="#home">Home</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#portfolio">Beats</a></li>
-    <li><a href="#purchase">Pricing</a></li>
-    <li><a href="#booking">Book</a></li>
-    <li><a href="#ask">Contact</a></li>
+    <li><a href="#home" data-page="home">Home</a></li>
+    <li><a href="#services" data-page="services">Services</a></li>
+    <li><a href="#portfolio" data-page="portfolio">Beats</a></li>
+    <li><a href="#samples" data-page="samples">Samples</a></li>
+    <li><a href="#purchase" data-page="purchase">Pricing</a></li>
+    <li><a href="#booking" data-page="booking">Book</a></li>
+    <li><a href="#about" data-page="about">About</a></li>
+    <li><a href="#ask" data-page="ask">Contact</a></li>
   </ul>
   <div class="nav-right">
     <button class="cart-btn" onclick="toggleCart()" title="Shopping Cart">
@@ -677,8 +1199,8 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
       <div class="user-menu" id="user-menu">
         <a onclick="openAuth();closeUserMenu()">👤 My Account</a>
         <a onclick="toggleCart();closeUserMenu()">🛒 Cart</a>
-        <a href="#purchase" onclick="closeUserMenu()">🎵 Buy Beats</a>
-        <a href="#booking" onclick="closeUserMenu()">📅 Book Session</a>
+        <a href="#purchase" data-page="purchase" onclick="closeUserMenu()">🎵 Buy Beats</a>
+        <a href="#booking" data-page="booking" onclick="closeUserMenu()">📅 Book Session</a>
         <a onclick="doLogout();closeUserMenu()" id="logout-link" style="display:none;color:rgba(255,100,100,.7)">🚪 Logout</a>
       </div>
     </div>
@@ -687,6 +1209,26 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
     </div>
   </div>
 </nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb" id="breadcrumb">
+  <span>Golden Icy Studio</span>
+  <span class="bc-sep">›</span>
+  <span class="bc-current" id="bc-current">Home</span>
+</div>
+
+<!-- PAGE DOTS -->
+<div class="page-dots">
+  <div class="page-dot active" data-page="home"><span class="dot-tip">Home</span></div>
+  <div class="page-dot" data-page="services"><span class="dot-tip">Services</span></div>
+  <div class="page-dot" data-page="gallery"><span class="dot-tip">Gallery</span></div>
+  <div class="page-dot" data-page="portfolio"><span class="dot-tip">Beats</span></div>
+  <div class="page-dot" data-page="samples"><span class="dot-tip">Samples</span></div>
+  <div class="page-dot" data-page="purchase"><span class="dot-tip">Pricing</span></div>
+  <div class="page-dot" data-page="booking"><span class="dot-tip">Book</span></div>
+  <div class="page-dot" data-page="about"><span class="dot-tip">About</span></div>
+  <div class="page-dot" data-page="ask"><span class="dot-tip">Contact</span></div>
+</div>
 
 <!-- HERO WITH YOUR STUDIO PHOTO AS BACKGROUND -->
 <section id="home">
@@ -834,12 +1376,15 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
 <section id="mp3upload">
   <div class="section-wrap">
     <div class="reveal"><p class="sec-label">Direct Upload</p><h2 class="sec-title">Upload Beats</h2><div class="gold-line"></div>
-    <p style="font-size:.83rem;opacity:.6;max-width:550px;line-height:1.9;margin-bottom:2rem">Upload MP3 or WAV files directly. Visitors can preview and play your beats before purchasing.</p></div>
-    <div class="mp3-drop reveal" id="mp3-zone" onclick="document.getElementById('mp3-input').click()" ondragover="mp3DO(event)" ondragleave="mp3DL(event)" ondrop="mp3Drop(event)">
+    <p style="font-size:.83rem;opacity:.6;max-width:550px;line-height:1.9;margin-bottom:.8rem">Upload MP3 or WAV files directly. Visitors can preview, purchase and download your beats.</p>
+    <div id="beat-slot-status" style="display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1rem;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);margin-bottom:1.5rem;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)">
+      <span>📁</span> <span id="beat-slot-text">0 / 2 beats uploaded</span>
+    </div></div>
+    <div class="mp3-drop reveal" id="mp3-zone" onclick="mp3ZoneClick()" ondragover="mp3DO(event)" ondragleave="mp3DL(event)" ondrop="mp3Drop(event)">
       <input type="file" id="mp3-input" accept=".mp3,.wav,audio/*" multiple onchange="loadMP3s(this.files)"/>
       <div class="mp3-drop-icon">🎵</div>
       <h3>Drop Beats Here</h3>
-      <p>Click to browse · MP3 & WAV supported</p>
+      <p>Click to browse · MP3 & WAV · Max 2 beats · Permanently saved</p>
       <span class="btn-gold" style="pointer-events:none">Choose Files</span>
     </div>
     <div class="mp3-list" id="mp3-list">
@@ -1009,7 +1554,7 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
       <div class="reveal-l">
         <p style="font-size:.88rem;line-height:2;opacity:.68;margin-bottom:2rem">Have a question? Want to order a custom beat or book a session? We respond within 24 hours.</p>
         <div class="contact-row"><div class="c-icon">📞</div><a href="tel:+263714587544">+263 71 458 7544</a></div>
-        <div class="contact-row"><div class="c-icon">✉️</div><a href="mailto:goldenicystudio@gmail.com">goldenicystudio@gmail.com</a></div>
+        <div class="contact-row"><div class="c-icon">✉️</div><a href="/cdn-cgi/l/email-protection#3c5b5350585952555f454f48495855537c5b515d5550125f5351"><span class="__cf_email__" data-cfemail="a6c1c9cac2c3c8cfc5dfd5d2d3c2cfc9e6c1cbc7cfca88c5c9cb">[email&#160;protected]</span></a></div>
         <div class="contact-row"><div class="c-icon">▶️</div><a href="https://youtube.com/@icybeats.n?si=VK5My2Ul1IP--v9b" target="_blank">youtube.com/@icybeats.n</a></div>
         <div class="contact-row"><div class="c-icon">📘</div><a href="https://facebook.com/nixlite" target="_blank">facebook.com/nixlite</a></div>
         <div class="contact-row"><div class="c-icon">💬</div><a href="https://wa.me/263714587544" target="_blank">WhatsApp Us</a></div>
@@ -1062,7 +1607,7 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
     <div class="footer-col">
       <h4>Contact</h4>
       <a href="tel:+263714587544">📞 +263 71 458 7544</a>
-      <a href="mailto:goldenicystudio@gmail.com">✉️ goldenicystudio@gmail.com</a>
+      <a href="/cdn-cgi/l/email-protection#c2a5adaea6a7acaba1bbb1b6b7a6abad82a5afa3abaeeca1adaf">✉️ <span class="__cf_email__" data-cfemail="0760686b6362696e647e747372636e6847606a666e6b2964686a">[email&#160;protected]</span></a>
       <a href="https://youtube.com/@icybeats.n" target="_blank">▶️ youtube.com/@icybeats.n</a>
       <a href="https://facebook.com/nixlite" target="_blank">📘 facebook.com/nixlite</a>
       <a href="https://wa.me/263714587544" target="_blank">💬 WhatsApp Us</a>
@@ -1078,8 +1623,10 @@ footer{background:var(--blk);border-top:1px solid rgba(201,168,76,.1);position:r
 // CURSOR
 
 
-// LOADER
-window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loader').classList.add('done'),1800));
+// LOADER — dismiss after load or after 3s max (whichever comes first)
+const dismissLoader = () => document.getElementById('loader').classList.add('done');
+window.addEventListener('load', () => setTimeout(dismissLoader, 1800));
+setTimeout(dismissLoader, 3000);
 
 // PARTICLES
 (function(){
@@ -1093,26 +1640,166 @@ window.addEventListener('load',()=>setTimeout(()=>document.getElementById('loade
   draw();
 })();
 
-// NAV SCROLL
-const navEl=document.getElementById('nav');
-window.addEventListener('scroll',()=>{
-  navEl.classList.toggle('scrolled',window.scrollY>60);
-  document.getElementById('btt').classList.toggle('show',window.scrollY>400);
-  let cur3='';
-  document.querySelectorAll('section[id]').forEach(s=>{if(window.scrollY>=s.offsetTop-130)cur3=s.id});
-  document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur3));
+function navigateTo(pageId, pushState=true) {
+  // Routed via window.navigateTo set in DOMContentLoaded
+  if(window._nav) window._nav(pageId, pushState);
+}
+
+// ── PAGE ROUTER ──
+document.addEventListener('DOMContentLoaded', function() {
+
+// Define navEl and ro first so navigateTo can use them
+const navEl = document.getElementById('nav');
+const ro = new IntersectionObserver(entries => entries.forEach((e,i) => {
+  if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), i * 80);
+}), { threshold: .08 });
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el => ro.observe(el));
+const PAGES = {
+  home:     { label: 'Home',     title: 'Golden Icy Studio | Beat Production' },
+  services: { label: 'Services', title: 'Services | Golden Icy Studio' },
+  gallery:  { label: 'Gallery',  title: 'Gallery | Golden Icy Studio' },
+  portfolio:{ label: 'Beats',    title: 'Beats | Golden Icy Studio' },
+  samples:  { label: 'Samples',  title: 'Sample Packs | Golden Icy Studio' },
+  purchase: { label: 'Pricing',  title: 'Pricing | Golden Icy Studio' },
+  booking:  { label: 'Book',     title: 'Book a Session | Golden Icy Studio' },
+  about:    { label: 'About',    title: 'About | Golden Icy Studio' },
+  ask:      { label: 'Contact',  title: 'Contact | Golden Icy Studio' }
+};
+const PAGE_ORDER = Object.keys(PAGES);
+let currentPage = '';
+
+function navigateTo(pageId, pushState=true) {
+  if (!PAGES[pageId] || pageId === currentPage) return;
+  const prev = document.getElementById('section-' + currentPage);
+  const next = document.getElementById('section-' + pageId);
+  if (!next) return;
+
+  // Animate out
+  if (prev) {
+    prev.classList.add('page-leaving');
+    setTimeout(() => { prev.classList.remove('page-active','page-leaving'); prev.style.display='none'; }, 260);
+  }
+
+  // Animate in
+  next.style.display = 'block';
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      next.classList.add('page-active');
+    });
+  });
+
+  currentPage = pageId;
+  document.title = PAGES[pageId].title;
+
+  // Update nav active states
+  document.querySelectorAll('.nav-links a, .mobile-nav a').forEach(a => {
+    a.classList.toggle('active', a.dataset.page === pageId);
+  });
+
+  // Update page dots
+  document.querySelectorAll('.page-dot').forEach(d => {
+    d.classList.toggle('active', d.dataset.page === pageId);
+  });
+
+  // Breadcrumb
+  const bc = document.getElementById('bc-current');
+  if (bc) bc.textContent = PAGES[pageId].label;
+
+  // URL hash
+  if (pushState) history.pushState({ page: pageId }, '', '#' + pageId);
+
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Nav scrolled state
+  navEl.classList.toggle('scrolled', window.scrollY > 60);
+
+  // Re-trigger reveals on new page
+  setTimeout(() => {
+    document.querySelectorAll('#section-' + pageId + ' .reveal, #section-' + pageId + ' .reveal-l, #section-' + pageId + ' .reveal-r').forEach(el => {
+      el.classList.remove('visible');
+      ro.observe(el);
+    });
+  }, 50);
+
+  closeMob();
+}
+window._nav = navigateTo;
+
+// NAV SCROLL (for scrolled class only)
+window.addEventListener('scroll', () => {
+  navEl.classList.toggle('scrolled', window.scrollY > 60);
+  document.getElementById('btt').classList.toggle('show', window.scrollY > 400);
 });
 
-// MOBILE NAV
+// REVEAL already initialized above
+
+// Handle browser back/forward
+window.addEventListener('popstate', e => {
+  const page = (e.state && e.state.page) || 'home';
+  navigateTo(page, false);
+});
+
+// Intercept all hash links
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const hash = a.getAttribute('href').slice(1);
+  if (PAGES[hash]) { e.preventDefault(); navigateTo(hash); }
+});
+
+// Keyboard navigation between pages
+document.addEventListener('keydown', e => {
+  if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+  const idx = PAGE_ORDER.indexOf(currentPage);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); if (idx < PAGE_ORDER.length-1) navigateTo(PAGE_ORDER[idx+1]); }
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); if (idx > 0) navigateTo(PAGE_ORDER[idx-1]); }
+});
+
+// Init router on load
+(function initRouter() {
+  const hash = window.location.hash.slice(1);
+  const startPage = PAGES[hash] ? hash : 'home';
+
+  // Wrap each section in a page container and hide all
+  PAGE_ORDER.forEach(id => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const wrapper = document.createElement('div');
+    wrapper.id = 'section-' + id;
+    wrapper.className = 'page-wrapper';
+    wrapper.style.display = 'none';
+    sec.parentNode.insertBefore(wrapper, sec);
+    wrapper.appendChild(sec);
+  });
+
+  // Also wrap footer in last page or make it global
+  const footer = document.querySelector('footer');
+  if (footer) {
+    const wrapper = document.getElementById('section-ask');
+    if (wrapper) wrapper.appendChild(footer);
+  }
+
+  // Wire page dot clicks
+  document.querySelectorAll('.page-dot[data-page]').forEach(dot => {
+    dot.addEventListener('click', () => navigateTo(dot.dataset.page));
+  });
+
+  // Wire nav logo
+  const navLogo = document.querySelector('.nav-logo');
+  if (navLogo) navLogo.addEventListener('click', e => { e.preventDefault(); navigateTo('home'); });
+
+  // Set initial page
+  history.replaceState({ page: startPage }, '', '#' + startPage);
+  currentPage = ''; // allow navigateTo to proceed
+  navigateTo(startPage, false);
+})();
+
+}); // end DOMContentLoaded
+
+// MOBILE NAV — global so hamburger onclick can reach them
 function toggleMob(){document.getElementById('hamburger').classList.toggle('open');document.getElementById('mobile-nav').classList.toggle('open')}
 function closeMob(){document.getElementById('hamburger').classList.remove('open');document.getElementById('mobile-nav').classList.remove('open')}
-
-// SMOOTH SCROLL
-document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();window.scrollTo({top:t.offsetTop-70,behavior:'smooth'})}}));
-
-// REVEAL
-const ro=new IntersectionObserver(entries=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80)}),{threshold:.08});
-document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>ro.observe(el));
 
 // TOAST
 function toast(msg){const t=document.getElementById('toast');t.textContent=msg;const isErr=msg.startsWith('⚠️')||msg.startsWith('❌');t.classList.toggle('error',isErr);t.classList.add('show');setTimeout(()=>{t.classList.remove('show');t.classList.remove('error')},3500)}
@@ -1456,6 +2143,9 @@ function submitMobilePayment(){
     sendPaymentNotification(name,email,activeMobileMethod,ref,itemList,t.total.toFixed(2));
     document.getElementById('order-ref').textContent=ref;
     checkoutStep(3);
+    // Auto-download purchased beats
+    const beatPurchases=cart.filter(c=>c._beatUid);
+    if(beatPurchases.length>0){beatPurchases.forEach((item,i)=>setTimeout(()=>downloadBeat(item._beatUid),1000+i*800));}
     btn.textContent='✓ Submit Payment Confirmation';btn.disabled=false;
     proofFile=null;
     document.getElementById('proof-drop').style.borderColor='';
@@ -1487,7 +2177,39 @@ function fmtCard(el){let v=el.value.replace(/\D/g,'').substring(0,16);el.value=v
 function fmtExp(el){let v=el.value.replace(/\D/g,'');if(v.length>=2)v=v.substring(0,2)+'/'+v.substring(2,4);el.value=v;}
 function initPayPalButtons(){}
 function processCard(){}function processApple(){}function processGoogle(){}
-function finishCheckout(){cart=[];renderCart();updateCartCount();closeCheckout();toast('🎵 Thank you! Check your email for your license.')}
+function finishCheckout(){
+  // Auto-download any beats that were purchased
+  const beatItems = cart.filter(c=>c._beatUid);
+  if(beatItems.length>0){
+    beatItems.forEach((item,i)=>{
+      setTimeout(()=>downloadBeat(item._beatUid), i*800);
+    });
+    setTimeout(()=>toast('✓ Your beats are downloading!'), beatItems.length*800);
+  }
+  // Show purchase success panel
+  showPurchaseSuccess();
+  cart=[];renderCart();updateCartCount();closeCheckout();
+  if(!beatItems.length) toast('🎵 Thank you! Check your email for your license.');
+}
+
+function showPurchaseSuccess(){
+  let modal = document.getElementById('purchase-success-modal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id='purchase-success-modal';
+    modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:900;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(12px)';
+    modal.innerHTML=`<div style="background:var(--blk2);border:1px solid var(--gb);max-width:440px;width:90%;padding:2.5rem;text-align:center;animation:modalIn .4s ease;position:relative">
+      <div style="font-size:3.5rem;margin-bottom:1rem">🎉</div>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:.1em;background:linear-gradient(90deg,var(--gold-l),var(--ice));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem">Purchase Successful!</h2>
+      <div style="width:60px;height:2px;background:linear-gradient(90deg,var(--gold),var(--ice));margin:.8rem auto 1.2rem"></div>
+      <p style="font-size:.82rem;opacity:.7;line-height:1.8;margin-bottom:.6rem">Your payment has been received and confirmed. Your beats are downloading automatically.</p>
+      <p style="font-size:.78rem;color:var(--gold-l);opacity:.85;margin-bottom:1.8rem">📧 A confirmation has been sent to your email. License docs will follow within 24 hrs.</p>
+      <button class="btn-gold" onclick="document.getElementById('purchase-success-modal').remove()" style="width:100%;justify-content:center">✓ Done</button>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+  }
+}
 
 // ── YOUTUBE ──
 function playBeat(id,vid){
@@ -1529,37 +2251,134 @@ function lbOpen(src,cap){document.getElementById('lb-img').src=src;document.getE
 function lbClose(e){if(!e||e.target===document.getElementById('lightbox')||e.target.tagName==='BUTTON')document.getElementById('lightbox').classList.remove('open')}
 document.querySelector('.lb-close').onclick=lbClose;
 
-// ── MP3 UPLOAD ──
-function mp3DO(e){e.preventDefault();document.getElementById('mp3-zone').classList.add('drag')}
+// ── MP3 UPLOAD (persistent, 2-beat limit, duplicate check, download) ──
+const MAX_BEATS = 2;
+let savedBeats = [];
+
+function loadSavedBeats(){
+  try {
+    const raw = localStorage.getItem('gis_beats');
+    savedBeats = raw ? JSON.parse(raw) : [];
+  } catch(e){ savedBeats = []; }
+  savedBeats.forEach(b => renderBeatCard(b));
+  updateBeatSlotStatus();
+}
+
+function persistBeats(){
+  try { localStorage.setItem('gis_beats', JSON.stringify(savedBeats)); } catch(e){}
+}
+
+function updateBeatSlotStatus(){
+  const txt = document.getElementById('beat-slot-text');
+  if(txt) txt.textContent = savedBeats.length+' / '+MAX_BEATS+' beats uploaded';
+  const zone = document.getElementById('mp3-zone');
+  if(zone){
+    if(savedBeats.length >= MAX_BEATS){
+      zone.style.opacity='.4';zone.style.pointerEvents='none';
+      zone.querySelector('h3').textContent='Beat Slots Full (2/2)';
+      zone.querySelector('p').textContent='Remove a beat to upload a new one';
+    } else {
+      zone.style.opacity='1';zone.style.pointerEvents='auto';
+      zone.querySelector('h3').textContent='Drop Beats Here';
+      zone.querySelector('p').textContent='Click to browse · MP3 & WAV · Max 2 beats · Permanently saved';
+    }
+  }
+}
+
+function mp3ZoneClick(){
+  if(savedBeats.length >= MAX_BEATS){ toast('⚠️ Max 2 beats allowed. Remove one first.'); return; }
+  document.getElementById('mp3-input').click();
+}
+
+function mp3DO(e){e.preventDefault();if(savedBeats.length<MAX_BEATS)document.getElementById('mp3-zone').classList.add('drag')}
 function mp3DL(){document.getElementById('mp3-zone').classList.remove('drag')}
 function mp3Drop(e){e.preventDefault();mp3DL();loadMP3s(e.dataTransfer.files)}
+
 function loadMP3s(files){
   const list=document.getElementById('mp3-list');
   const empty=document.getElementById('mp3-empty');if(empty)empty.remove();
+  let added=0;
   Array.from(files).forEach(file=>{
     if(!file.type.startsWith('audio/'))return;
-    const url=URL.createObjectURL(file);
-    const size=(file.size/1024/1024).toFixed(1)+'MB';
-    const fmt=file.name.split('.').pop().toUpperCase();
-    const uid=Date.now()+Math.random();
-    const card=document.createElement('div');card.className='mp3-card';card.id='mp3-'+uid;
-    const name=file.name.replace(/\.[^.]+$/,'');
-    card.innerHTML=`
-      <div class="mp3-thumb-icon">🎵</div>
-      <div class="mp3-info">
-        <h4>${name}</h4>
-        <p>${fmt} · ${size}</p>
-        <audio controls src="${url}" preload="metadata" style="width:100%;margin-top:.5rem;accent-color:var(--gold)"></audio>
-        <div class="mp3-meta-row" style="margin-top:.5rem">
-          <input class="mp3-price-in" type="text" placeholder="R 0.00"/>
-          <select class="mp3-lic-sel"><option>Basic License</option><option>Premium License</option><option>Exclusive</option></select>
-          <button class="btn-sm btn-gold" onclick="addToCart({id:'mp3-${uid}',name:'${name}',price:8,type:'Beat (MP3)',lic:'Basic License'})">🛒 Add to Cart</button>
-        </div>
-      </div>
-      <button class="mp3-del" onclick="document.getElementById('mp3-${uid}').remove();toast('Beat removed')">✕</button>`;
-    list.appendChild(card);
+    if(savedBeats.length+added >= MAX_BEATS){
+      toast('⚠️ Max 2 beats allowed. Slot full.');return;
+    }
+    // Duplicate check by filename
+    const cleanName = file.name.replace(/\.[^.]+$/,'');
+    const isDup = savedBeats.some(b=>b.name.toLowerCase()===cleanName.toLowerCase());
+    if(isDup){ toast('⚠️ "'+cleanName+'" already exists. Remove it first.'); return; }
+
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      const uid = 'b-'+Date.now()+'-'+Math.floor(Math.random()*9999);
+      const size=(file.size/1024/1024).toFixed(1)+'MB';
+      const fmt=file.name.split('.').pop().toUpperCase();
+      const beat = { uid, name:cleanName, fmt, size, data:ev.target.result, price:8, lic:'Basic License', ext:file.name.split('.').pop() };
+      savedBeats.push(beat);
+      persistBeats();
+      renderBeatCard(beat);
+      updateBeatSlotStatus();
+      added++;
+    };
+    reader.readAsDataURL(file);
   });
-  toast('✓ Beats loaded!');
+  if(Array.from(files).some(f=>f.type.startsWith('audio/'))) toast('✓ Beat saved permanently!');
+}
+
+function renderBeatCard(beat){
+  const list = document.getElementById('mp3-list');
+  const empty = document.getElementById('mp3-empty'); if(empty) empty.remove();
+  if(document.getElementById('mp3-'+beat.uid)) return; // already rendered
+  const card = document.createElement('div'); card.className='mp3-card'; card.id='mp3-'+beat.uid;
+  card.innerHTML=`
+    <div class="mp3-thumb-icon">🎵</div>
+    <div class="mp3-info">
+      <h4>${beat.name}</h4>
+      <p>${beat.fmt} · ${beat.size} · <span style="color:var(--gold);font-size:.62rem;letter-spacing:.12em">SAVED</span></p>
+      <audio controls src="${beat.data}" preload="metadata" style="width:100%;margin-top:.5rem;accent-color:var(--gold)"></audio>
+      <div class="mp3-meta-row" style="margin-top:.5rem">
+        <input class="mp3-price-in" type="text" placeholder="R ${beat.price}.00" id="price-${beat.uid}"/>
+        <select class="mp3-lic-sel" id="lic-${beat.uid}"><option>Basic License</option><option>Premium License</option><option>Exclusive</option></select>
+        <button class="btn-sm btn-gold" onclick="addBeatToCart('${beat.uid}')">🛒 Add to Cart</button>
+        <button class="btn-sm btn-ice" onclick="downloadBeat('${beat.uid}')" title="Download" style="gap:.3rem">⬇ Download</button>
+      </div>
+    </div>
+    <button class="mp3-del" onclick="deleteBeat('${beat.uid}')">✕</button>`;
+  list.appendChild(card);
+}
+
+function addBeatToCart(uid){
+  const beat = savedBeats.find(b=>b.uid===uid);
+  if(!beat) return;
+  const priceEl=document.getElementById('price-'+uid);
+  const licEl=document.getElementById('lic-'+uid);
+  const rawPrice=priceEl?priceEl.value.replace(/[^0-9.]/g,''):'';
+  const price=parseFloat(rawPrice)||beat.price;
+  const lic=licEl?licEl.value:'Basic License';
+  addToCart({id:'mp3-'+uid, name:beat.name, price, type:'Beat ('+beat.fmt+')', lic, _beatUid:uid});
+}
+
+function downloadBeat(uid){
+  const beat = savedBeats.find(b=>b.uid===uid);
+  if(!beat){ toast('⚠️ Beat not found.'); return; }
+  const a=document.createElement('a');
+  a.href=beat.data;
+  a.download=beat.name+'.'+beat.ext;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  toast('⬇ Downloading "'+beat.name+'"…');
+}
+
+function deleteBeat(uid){
+  savedBeats = savedBeats.filter(b=>b.uid!==uid);
+  persistBeats();
+  const card=document.getElementById('mp3-'+uid);
+  if(card) card.remove();
+  updateBeatSlotStatus();
+  if(savedBeats.length===0){
+    const list=document.getElementById('mp3-list');
+    list.innerHTML='<div class="mp3-empty" id="mp3-empty">No beats uploaded yet — add your first one above ↑</div>';
+  }
+  toast('Beat removed.');
 }
 
 // ── PRICING TOGGLE ──
@@ -1638,6 +2457,7 @@ function submitBooking(){
   document.getElementById('bk-sum').style.display='none';
 }
 renderCal();
+loadSavedBeats();
 
 // ── TESTIMONIALS ──
 let tIdx=0;
@@ -1661,15 +2481,13 @@ function submitContact(){
   if(!email){fieldErr('f-email','Email is required');ok=false;}
   else if(!isValidEmail(email)){fieldErr('f-email','Enter a valid email address');ok=false;}
   if(!svc){fieldErr('f-svc','Please select a service');ok=false;}
-  if(!msg){fieldErr('f-msg','Please enter your message');ok=false;}
-  else if(msg.length<10){fieldErr('f-msg','Message is too short — please give us more details');ok=false;}
+  if(!msg){fieldErr('f-msg','Message is required');ok=false;}
   if(!ok) return;
-  toast('✓ Message sent! We\'ll get back to you within 24 hours.');
+  toast('✓ Message sent! We\'ll get back to you soon.');
   document.getElementById('f-name').value='';
   document.getElementById('f-email').value='';
   document.getElementById('f-svc').value='';
   document.getElementById('f-msg').value='';
-  document.getElementById('cc').textContent='0/500';
 }
 </script>
 </body>
