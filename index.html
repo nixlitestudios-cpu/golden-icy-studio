@@ -2104,7 +2104,11 @@ var nextId       = 100;
 function loadState() {
   try {
     var u = localStorage.getItem(STORAGE_USER);
-    if (u) user = JSON.parse(u);
+    if (u) {
+      user = JSON.parse(u);
+      // Always require re-login on page load for security
+      user.loggedIn = false;
+    }
   } catch(e) {}
   try {
     var d = localStorage.getItem(STORAGE_DOCS);
@@ -2569,6 +2573,11 @@ function renderDocThumbnail(docId, dataURL) {
 }
 
 function openReader(id) {
+  if (!user.loggedIn) {
+    showToast('Please sign in to read documents.', 'warning');
+    openModal('login');
+    return;
+  }
   currentReaderId = id;
   var all = getAllDocs();
   var doc = null;
@@ -2823,9 +2832,13 @@ function doLogin() {
     notifyAdmin('New Member Registered', name, email, 'New account created.');
     showToast('Welcome, ' + name.split(' ')[0] + '!', 'success');
   } else {
-    // Check admin first
+    // Check admin first (requires correct email AND password)
     var isAdmin = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
     if (isAdmin) {
+      if (pass !== ADMIN_PASS) {
+        showLoginError('Incorrect admin password.');
+        return;
+      }
       var ini2 = 'AD';
       user = {loggedIn:true, name:'Admin', uploads:user.uploads, premium:true, isAdmin:true};
       closeModal();
@@ -3044,6 +3057,7 @@ function sendContactForm() {
 
 // ── ADMIN EMAIL ───────────────────────────────────────────────────
 var ADMIN_EMAIL = 'nixlite38@gmail.com';
+var ADMIN_PASS  = 'Admin@DocuSphere1';
 
 // ── PREMIUM ───────────────────────────────────────────────────
 function activatePremium() {
