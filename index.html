@@ -8,6 +8,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      if (typeof pdfjsLib !== "undefined") {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      }
+    </script>
     <script>emailjs.init("F9f5hlsjVRDI-wDzT");</script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -1261,6 +1267,7 @@
             margin-bottom: 12px;
             outline: none;
             transition: border-color 0.2s;
+            box-sizing: border-box;
         }
 
         .modal-form input:focus { border-color: var(--accent); }
@@ -1366,18 +1373,14 @@
             flex: 1;
             overflow-y: auto;
             background: #f0ece4;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
+            padding: 10px;
         }
 
         .reader-page {
             background: #fff;
-            max-width: 680px;
             width: 100%;
-            padding: 60px;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.2);
-            border-radius: 4px;
+            padding: 12px;
+            box-sizing: border-box;
             font-family: 'Merriweather', serif;
             font-size: 16px;
             line-height: 1.85;
@@ -1897,7 +1900,7 @@
                 <p>Whether you have questions about uploads, downloads, subscriptions or copyright, we're here to help you every step of the way.</p>
                 <div class="contact-detail">
                     <div class="icon"><i class="fa fa-envelope"></i></div>
-                    <div><strong>Email Support</strong><span><a href="/cdn-cgi/l/email-protection#3a54534256534e5f09027a5d575b535614595557"><span class="__cf_email__" data-cfemail="bbd5d2c3d7d2cfde8883fbdcd6dad2d795d8d4d6">[email&#160;protected]</span></a></span></div>
+                    <div><strong>Email Support</strong><span><a href="/cdn-cgi/l/email-protection#1876716074716c7d2b20587f75797174367b7775"><span class="__cf_email__" data-cfemail="0967607165607d6c3a31496e64686065276a6664">[email&#160;protected]</span></a></span></div>
                 </div>
                 <div class="contact-detail">
                     <div class="icon"><i class="fa fa-phone"></i></div>
@@ -1955,11 +1958,27 @@
             <button onclick="switchModalTab('register')">Register</button>
         </div>
         <div class="modal-form">
-            <input type="email" placeholder="Email address">
-            <input type="password" placeholder="Password">
+            <input type="email" id="loginEmailInput" placeholder="Email address">
+            <div style="position:relative;margin-bottom:12px">
+                <input type="password" id="loginPassInput" placeholder="Password" style="width:100%;padding-right:42px;margin-bottom:0">
+                <button type="button" onclick="togglePassVis('loginPassInput','loginPassEye')" id="loginPassEye"
+                  style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-light);font-size:15px;padding:0;line-height:1">
+                  <i class="fa fa-eye"></i>
+                </button>
+            </div>
+            <div id="loginError" style="display:none;background:#fff0f0;border:1px solid #fca5a5;border-radius:8px;padding:9px 14px;font-size:12px;color:#dc2626;margin-bottom:12px;align-items:center;gap:8px">
+                <i class="fa fa-exclamation-circle"></i>
+                <span id="loginErrorMsg">Incorrect email or password.</span>
+            </div>
             <div id="registerExtra" style="display:none;">
-                <input type="text" placeholder="Full name">
-                <input type="password" placeholder="Confirm password">
+                <input type="text" id="regNameInput" placeholder="Full name">
+                <div style="position:relative;margin-bottom:12px">
+                    <input type="password" id="regConfirmInput" placeholder="Confirm password" style="width:100%;padding-right:42px;margin-bottom:0">
+                    <button type="button" onclick="togglePassVis('regConfirmInput','regConfirmEye')" id="regConfirmEye"
+                      style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-light);font-size:15px;padding:0;line-height:1">
+                      <i class="fa fa-eye"></i>
+                    </button>
+                </div>
             </div>
             <button class="btn-modal" onclick="doLogin()">Sign In</button>
             <p style="text-align:center;margin-top:12px;font-size:12px;">
@@ -1972,7 +1991,8 @@
 <!-- PDF READER MODAL -->
 <div class="reader-modal-overlay" id="readerModal">
     <div class="reader-header">
-        <h4 id="readerTitle">Document Title</h4>
+        <button onclick="closeReader()" style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);color:#fff;padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;font-family:'Open Sans',sans-serif;transition:background .2s;white-space:nowrap" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'"><i class="fa fa-arrow-left"></i> Back</button>
+        <h4 id="readerTitle" style="flex:1;text-align:center;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 10px">Document Title</h4>
         <div class="reader-controls">
             <button onclick="readerZoom(-1)"><i class="fa fa-search-minus"></i></button>
             <button onclick="readerZoom(1)"><i class="fa fa-search-plus"></i></button>
@@ -1998,7 +2018,7 @@
 
 
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ================================================================
 //  DocuSphere Pro — Full Application Logic
 //  Uploaded PDFs are stored in localStorage (Base64) so they
@@ -2057,16 +2077,7 @@ function idbDelete(key) {
 }
 
 // ── SEED LIBRARY ─────────────────────────────────────────────────
-var SEED = [
-  {id:1, title:'Advanced Mathematics for ZIMSEC A-Level',   author:'Dr. Sarah Mutanda',    category:'Exam Notes', type:'PDF', access:'free',    icon:'📐', pages:342, rating:4.8, downloads:12840},
-  {id:2, title:'Introduction to Machine Learning',           author:'Prof. James Chikwanda',category:'Technology', type:'PDF', access:'free',    icon:'🤖', pages:520, rating:4.9, downloads:28430},
-  {id:3, title:'Business Studies Comprehensive Guide',       author:'MBA Editorial Board',  category:'Business',   type:'PDF', access:'premium', icon:'💼', pages:280, rating:4.6, downloads:9210},
-  {id:4, title:'African Literature & Oral Tradition',        author:'Dr. Chinua Editors',   category:'Literature', type:'PDF', access:'free',    icon:'📚', pages:198, rating:4.7, downloads:7650},
-  {id:5, title:'ZIMSEC Biology O-Level Study Pack',          author:'Exam Prep Institute',  category:'Exam Notes', type:'PDF', access:'free',    icon:'🔬', pages:410, rating:4.9, downloads:31200},
-  {id:6, title:'Financial Accounting Principles',            author:'CPA Review Panel',     category:'Business',   type:'PDF', access:'premium', icon:'💹', pages:360, rating:4.5, downloads:5840},
-  {id:7, title:'Python Programming for Beginners',           author:'Dev Academy Africa',   category:'Technology', type:'PDF', access:'free',    icon:'🐍', pages:290, rating:4.8, downloads:22100},
-  {id:8, title:'English Literature: Poetry Analysis',        author:'Cambridge Exam Team',  category:'Education',  type:'PDF', access:'free',    icon:'✍️', pages:160, rating:4.6, downloads:8940}
-];
+var SEED = []; // No fake documents — only real uploaded documents appear in the library
 
 var AUDIOBOOKS = [
   {title:'Atomic Habits',       narrator:'James Clear',        duration:'5h 35m', progress:62, emoji:'⚛️'},
@@ -2175,8 +2186,11 @@ function cardHTML(doc) {
     : '<span class="access-badge ' + doc.access + '">' + (doc.access === 'free' ? '✓ Free' : '★ Premium') + '</span>';
   var dlStr = doc.downloads >= 1000 ? (doc.downloads/1000).toFixed(1)+'K' : doc.downloads;
   return '<div class="doc-card">'
-    + '<div class="cover" style="background:' + grad(doc.id) + '">'
-    + '<div style="font-size:44px;position:relative;z-index:1">' + doc.icon + '</div>'
+    + '<div class="cover" style="background:' + grad(doc.id) + ';position:relative;overflow:hidden">'
+    + (isOwn && doc.fileName && doc.fileName.toLowerCase().endsWith('.pdf')
+        ? '<canvas id="thumb_' + doc.id + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s"></canvas>'
+          + '<div id="icon_' + doc.id + '" style="font-size:44px;position:relative;z-index:1">' + doc.icon + '</div>'
+        : '<div style="font-size:44px;position:relative;z-index:1">' + doc.icon + '</div>')
     + '<span class="type-badge">' + doc.type + '</span>' + badge
     + '</div>'
     + '<div class="body">'
@@ -2204,6 +2218,16 @@ function renderDocs(filter) {
   grid.innerHTML = list.length === 0
     ? '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-light)"><i class="fa fa-folder-open" style="font-size:40px;opacity:.3;display:block;margin-bottom:14px"></i>No documents here yet.</div>'
     : list.map(cardHTML).join('');
+  // Load first-page thumbnails for uploaded PDFs
+  setTimeout(function() {
+    uploadedDocs.forEach(function(doc) {
+      if (!doc.fileName || !doc.fileName.toLowerCase().endsWith('.pdf')) return;
+      if (!document.getElementById('thumb_' + doc.id)) return;
+      loadDocFile(doc.id, function(dataURL) {
+        if (dataURL) renderDocThumbnail(doc.id, dataURL);
+      });
+    });
+  }, 400);
 }
 
 function filterDocs(cat, btn) {
@@ -2426,6 +2450,123 @@ if (uploadZone) {
 var currentReaderId = null;
 var readerFontSize  = 16;
 var annotationMode  = false;
+var _pdfDoc   = null;
+var _pdfPage  = 1;
+var _pdfTotal = 1;
+
+function renderPDF(dataURL, password) {
+  if (typeof pdfjsLib === "undefined") {
+    var w = document.getElementById("pdfCanvasWrap");
+    if (w) w.innerHTML = "<p style='color:#fff;padding:20px'>PDF viewer not loaded.</p>";
+    return;
+  }
+  _pdfPage = 1;
+  var loadParams = {url: dataURL};
+  if (password) loadParams.password = password;
+
+  var loadTask = pdfjsLib.getDocument(loadParams);
+
+  // Handle password-protected PDFs
+  loadTask.onPassword = function(updatePassword, reason) {
+    var wrap = document.getElementById("pdfCanvasWrap");
+    var msg = reason === 2 ? "Incorrect password. Try again:" : "This PDF is password protected. Enter password:";
+    if (wrap) {
+      wrap.innerHTML =
+        '<div style="text-align:center;padding:40px 20px;color:#fff">'
+        + '<i class="fa fa-lock" style="font-size:40px;margin-bottom:16px;display:block;opacity:.7"></i>'
+        + '<p style="font-size:14px;margin-bottom:14px">' + msg + '</p>'
+        + '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'
+        + '<input id="pdfPassInput" type="password" placeholder="Enter PDF password" '
+        + 'style="padding:9px 14px;border-radius:8px;border:none;font-size:13px;outline:none;min-width:200px">'
+        + '<button onclick="submitPDFPassword()" '
+        + 'style="background:#c9973a;border:none;color:#1a1a1a;padding:9px 20px;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px">'
+        + '<i class="fa fa-unlock"></i> Unlock</button>'
+        + '</div></div>';
+      // Store updatePassword callback for later
+      window._pdfUpdatePassword = updatePassword;
+      // Allow Enter key
+      setTimeout(function() {
+        var inp = document.getElementById("pdfPassInput");
+        if (inp) inp.addEventListener("keydown", function(e) {
+          if (e.key === "Enter") submitPDFPassword();
+        });
+      }, 100);
+    }
+  };
+
+  loadTask.promise.then(function(pdf) {
+    _pdfDoc = pdf; _pdfTotal = pdf.numPages;
+    renderPDFPage(1);
+  }).catch(function(err) {
+    // Only show error if it's NOT a password error (password errors handled by onPassword)
+    if (err && err.name === "PasswordException") return;
+    var w = document.getElementById("pdfCanvasWrap");
+    if (w) w.innerHTML = "<p style='color:#fff;padding:20px'>Error loading PDF: " + err.message + "</p>";
+  });
+}
+
+function submitPDFPassword() {
+  var inp = document.getElementById("pdfPassInput");
+  var pass = inp ? inp.value : "";
+  if (!pass) { showToast("Please enter the PDF password.", "warning"); return; }
+  if (window._pdfUpdatePassword) {
+    window._pdfUpdatePassword(pass);
+  }
+}
+
+function renderPDFPage(num) {
+  if (!_pdfDoc) return;
+  _pdfDoc.getPage(num).then(function(page) {
+    var wrap = document.getElementById("pdfCanvasWrap");
+    var canvas = document.getElementById("pdfCanvas");
+    if (!canvas || !wrap) return;
+    var vp0 = page.getViewport({scale:1});
+    var dpr = window.devicePixelRatio || 1;
+    var availW = wrap.clientWidth || window.innerWidth;
+    var cssW  = availW;
+    var cssH  = Math.floor(vp0.height * (cssW / vp0.width));
+    var scale = (cssW / vp0.width) * dpr;
+    var vp = page.getViewport({scale: scale});
+    canvas.width  = Math.floor(cssW * dpr);
+    canvas.height = Math.floor(cssH * dpr);
+    canvas.style.width  = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    canvas.style.display = 'block';
+    page.render({canvasContext: canvas.getContext("2d"), viewport: vp}).promise.then(function() {
+      var info = document.getElementById("pdfPageInfo");
+      if (info) info.textContent = "Page " + num + " of " + _pdfTotal;
+    });
+  });
+}
+
+function pdfNextPage() {
+  if (!_pdfDoc || _pdfPage >= _pdfTotal) { showToast("Last page.", "warning"); return; }
+  _pdfPage++; renderPDFPage(_pdfPage);
+}
+function pdfPrevPage() {
+  if (!_pdfDoc || _pdfPage <= 1) { showToast("First page.", "warning"); return; }
+  _pdfPage--; renderPDFPage(_pdfPage);
+}
+
+function renderDocThumbnail(docId, dataURL) {
+  if (typeof pdfjsLib === "undefined") return;
+  pdfjsLib.getDocument(dataURL).promise.then(function(pdf) {
+    pdf.getPage(1).then(function(page) {
+      var canvas = document.getElementById("thumb_" + docId);
+      if (!canvas) return;
+      var vp0 = page.getViewport({scale:1});
+      var parent = canvas.parentElement;
+      var scale = parent ? (parent.clientWidth / vp0.width) : 1;
+      var vp = page.getViewport({scale: Math.max(scale, 0.4)});
+      canvas.width = vp.width; canvas.height = vp.height;
+      page.render({canvasContext: canvas.getContext("2d"), viewport: vp}).promise.then(function() {
+        canvas.style.opacity = "1";
+        var icon = document.getElementById("icon_" + docId);
+        if (icon) icon.style.display = "none";
+      });
+    });
+  }).catch(function(){});
+}
 
 function openReader(id) {
   currentReaderId = id;
@@ -2450,14 +2591,26 @@ function openReader(id) {
   annotationMode = false;
 
   if (!doc) return;
+  _pdfDoc = null;
   loadDocFile(doc.id, function(fileData) {
   if (doc && fileData && doc.fileName && doc.fileName.split('.').pop().toLowerCase() === 'pdf') {
-    // Real uploaded PDF — embed in iframe for in-browser reading
-    content.innerHTML = '<h2 style="margin-bottom:6px">' + doc.icon + ' ' + doc.title + '</h2>'
-      + '<p style="color:var(--text-light);font-size:12px;margin-bottom:14px">'
-      + 'Uploaded by <strong>' + doc.author + '</strong> &nbsp;·&nbsp; ' + doc.fileSize + ' MB &nbsp;·&nbsp; ' + (doc.uploadedAt || 'Recently')
-      + '</p>'
-      + '<iframe src="' + fileData + '" style="width:100%;height:72vh;border:none;border-radius:8px;box-shadow:0 2px 16px rgba(0,0,0,.15)" title="' + doc.title + '"></iframe>';
+    content.innerHTML =
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:8px">'
+      + '<div>'
+      + '<h2 style="margin:0 0 2px;font-size:16px">' + doc.icon + ' ' + doc.title + '</h2>'
+      + '<p style="color:var(--text-light);font-size:11px;margin:0">By <strong>' + doc.author + '</strong>'
+      + ' &middot; ' + (doc.fileSize || '?') + ' MB &middot; ' + (doc.uploadedAt || 'Recently') + '</p>'
+      + '</div>'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<button onclick="pdfPrevPage()" class="btn-primary" style="padding:7px 16px;font-size:13px;display:flex;align-items:center;gap:6px"><i class="fa fa-chevron-left"></i> Prev</button>'
+      + '<span id="pdfPageInfo" style="font-size:13px;color:var(--text-mid);font-weight:700;white-space:nowrap;min-width:90px;text-align:center">Page 1</span>'
+      + '<button onclick="pdfNextPage()" class="btn-primary" style="padding:7px 16px;font-size:13px;display:flex;align-items:center;gap:6px">Next <i class="fa fa-chevron-right"></i></button>'
+      + '</div>'
+      + '</div>'
+      + '<div id="pdfCanvasWrap" style="width:100%;background:#404040;border-radius:10px;padding:0;box-sizing:border-box">'
+      + '<canvas id="pdfCanvas" style="display:block;border-radius:6px;box-shadow:0 4px 24px rgba(0,0,0,.5)"></canvas>'
+      + '</div>';
+    renderPDF(fileData);
   } else if (doc && fileData) {
     // Other file types — download prompt
     content.innerHTML = '<h2>' + doc.icon + ' ' + doc.title + '</h2>'
@@ -2586,8 +2739,9 @@ function downloadDoc(id) {
 function openModal(tab) {
   document.getElementById('authModal').classList.add('open');
   switchModalTab(tab || 'login');
+  clearLoginError();
 }
-function closeModal() { document.getElementById('authModal').classList.remove('open'); }
+function closeModal() { document.getElementById('authModal').classList.remove('open'); clearLoginError(); }
 
 function switchModalTab(tab) {
   var isReg = tab === 'register';
@@ -2596,52 +2750,121 @@ function switchModalTab(tab) {
   document.querySelectorAll('.modal-tabs button').forEach(function(b, i) {
     b.classList.toggle('active', (i === 0 && !isReg) || (i === 1 && isReg));
   });
+  clearLoginError();
+}
+
+// ── REGISTERED USERS STORE ────────────────────────────────────────
+function loadUsers() {
+  try { return JSON.parse(localStorage.getItem('ds_users') || '{}'); } catch(e) { return {}; }
+}
+function saveUsers(u) {
+  try { localStorage.setItem('ds_users', JSON.stringify(u)); } catch(e) {}
+}
+
+// ── PASSWORD VISIBILITY TOGGLE ────────────────────────────────────
+function togglePassVis(inputId, btnId) {
+  var inp = document.getElementById(inputId);
+  var btn = document.getElementById(btnId);
+  if (!inp) return;
+  var show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  if (btn) btn.innerHTML = '<i class="fa fa-eye' + (show ? '-slash' : '') + '"></i>';
+}
+
+// ── LOGIN ERROR HELPER ─────────────────────────────────────────────
+function showLoginError(msg) {
+  var box = document.getElementById('loginError');
+  var txt = document.getElementById('loginErrorMsg');
+  if (box && txt) {
+    txt.textContent = msg;
+    box.style.cssText = box.style.cssText.replace('display:none','display:flex');
+    box.style.display = 'flex';
+  }
+}
+function clearLoginError() {
+  var box = document.getElementById('loginError');
+  if (box) box.style.display = 'none';
 }
 
 function doLogin() {
-  var emailEl   = document.querySelector('#authModal .modal-form input[type="email"]');
-  var passEl    = document.querySelector('#authModal .modal-form input[type="password"]');
+  var emailEl   = document.getElementById('loginEmailInput');
+  var passEl    = document.getElementById('loginPassInput');
   var isReg     = document.getElementById('registerExtra').style.display !== 'none';
   var email     = emailEl ? emailEl.value.trim() : '';
-  var pass      = passEl  ? passEl.value.trim()  : '';
+  var pass      = passEl  ? passEl.value         : '';
+
+  clearLoginError();
 
   if (!email || !pass)  { showToast('Please enter email and password.', 'warning'); return; }
   if (pass.length < 4)  { showToast('Password must be at least 4 characters.', 'warning'); return; }
 
   if (isReg) {
-    var nameEl    = document.querySelector('#registerExtra input[type="text"]');
-    var confirmEl = document.querySelector('#registerExtra input[type="password"]');
+    var nameEl    = document.getElementById('regNameInput');
+    var confirmEl = document.getElementById('regConfirmInput');
     var name      = nameEl    ? nameEl.value.trim()    : '';
-    var confirm   = confirmEl ? confirmEl.value.trim() : '';
+    var confirm   = confirmEl ? confirmEl.value         : '';
     if (!name)            { showToast('Please enter your full name.', 'warning'); return; }
     if (pass !== confirm) { showToast('Passwords do not match.', 'error');        return; }
+
+    // Save account to store
+    var users = loadUsers();
+    if (users[email.toLowerCase()]) {
+      showToast('An account with this email already exists. Please sign in.', 'warning');
+      return;
+    }
+    users[email.toLowerCase()] = { name: name, pass: pass };
+    saveUsers(users);
+
     var ini = name.split(' ').map(function(w){return w[0];}).join('').toUpperCase().slice(0,2);
     user = {loggedIn:true, name:name, uploads:user.uploads, premium:user.premium};
     closeModal();
     setUserBar(ini, name);
     saveState();
-    notifyAdmin(
-      'New Member Registered',
-      name,
-      email,
-      'New account created.'
-    );
+    notifyAdmin('New Member Registered', name, email, 'New account created.');
     showToast('Welcome, ' + name.split(' ')[0] + '!', 'success');
   } else {
+    // Check admin first
     var isAdmin = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
-    var ini2 = email.substring(0,2).toUpperCase();
-    var fn   = isAdmin ? 'Admin' : email.split('@')[0];
-    user = {loggedIn:true, name:fn, uploads:user.uploads, premium:true, isAdmin:isAdmin};
-    closeModal();
-    setUserBar(isAdmin ? 'AD' : ini2, fn);
-    // Show/hide admin nav link
-    document.querySelectorAll('a[href="#admin"]').forEach(function(a){ a.style.display = isAdmin ? '' : 'none'; });
-    saveState();
     if (isAdmin) {
-      showToast('\u{1F6E1} Welcome Admin! Full access granted.', 'success');
-    } else {
-      showToast('Welcome back to DocuSphere Pro!', 'success');
+      var ini2 = 'AD';
+      user = {loggedIn:true, name:'Admin', uploads:user.uploads, premium:true, isAdmin:true};
+      closeModal();
+      setUserBar(ini2, 'Admin');
+      document.querySelectorAll('a[href="#admin"]').forEach(function(a){ a.style.display = ''; });
+      saveState();
+      showToast('\uD83D\uDEE1\uFE0F Welcome Admin! Full access granted.', 'success');
+      return;
     }
+    // Check registered users
+    var users = loadUsers();
+    var stored = users[email.toLowerCase()];
+    if (!stored) {
+      showLoginError('No account found for this email. Please register first.');
+      return;
+    }
+    if (stored.pass !== pass) {
+      showLoginError('Incorrect password. Please try again.');
+      // Shake the password input
+      var pEl = document.getElementById('loginPassInput');
+      if (pEl) {
+        pEl.style.transition = 'transform 0.1s';
+        var shakes = ['-6px','6px','-4px','4px','0px'];
+        var i = 0;
+        var shk = setInterval(function() {
+          pEl.style.transform = 'translateX(' + shakes[i++] + ')';
+          if (i >= shakes.length) { clearInterval(shk); }
+        }, 60);
+      }
+      return;
+    }
+    var fn   = stored.name || email.split('@')[0];
+    var ini3 = fn.substring(0,2).toUpperCase();
+    user = {loggedIn:true, name:fn, uploads:user.uploads, premium:user.premium||false, isAdmin:false};
+    closeModal();
+    setUserBar(ini3, fn);
+    document.querySelectorAll('a[href="#admin"]').forEach(function(a){ a.closest('li').style.display = 'none'; });
+    saveState();
+    showToast('Welcome back, ' + fn.split(' ')[0] + '!', 'success');
   }
 }
 
@@ -2983,12 +3206,14 @@ renderAudiobooks();
             + '<i class="fa fa-file-pdf-o" style="color:var(--accent);margin-right:6px"></i>'
             + '<span title="' + (doc.fileName || doc.title) + '">' + shortName + '</span></td>'
           + '<td style="padding:9px 8px;font-size:11px;color:var(--text-light);white-space:nowrap">' + (doc.fileSize || '—') + ' MB</td>'
-          + '<td style="padding:9px 14px 9px 8px;text-align:right"><span class="status-badge uploaded" style="font-size:10px"><i class="fa fa-check"></i> Done</span></td>';
-        tbody.prepend(row);
+                   + '<td style="padding:9px 8px;font-size:11px;color:var(--text-light)">' + (doc.uploadDate || '—') + '</td>'
+          + '<td style="padding:9px 8px"><span style="background:' + (doc.access==='free'?'#dcfce7':'#fef9c3') + ';color:' + (doc.access==='free'?'#166534':'#854d0e') + ';font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase">' + (doc.access||'free') + '</span></td>';
+        tbody.insertBefore(row, tbody.firstChild);
       });
     }
   }
 })();
+
 </script>
 </body>
 </html>
