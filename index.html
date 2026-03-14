@@ -1897,7 +1897,7 @@
                 <p>Whether you have questions about uploads, downloads, subscriptions or copyright, we're here to help you every step of the way.</p>
                 <div class="contact-detail">
                     <div class="icon"><i class="fa fa-envelope"></i></div>
-                    <div><strong>Email Support</strong><span><a href="mailto:nixlite38@gmail.com">nixlite38@gmail.com</a></span></div>
+                    <div><strong>Email Support</strong><span><a href="/cdn-cgi/l/email-protection#3a54534256534e5f09027a5d575b535614595557"><span class="__cf_email__" data-cfemail="bbd5d2c3d7d2cfde8883fbdcd6dad2d795d8d4d6">[email&#160;protected]</span></a></span></div>
                 </div>
                 <div class="contact-detail">
                     <div class="icon"><i class="fa fa-phone"></i></div>
@@ -2005,10 +2005,56 @@
 //  survive page refresh and appear in the library permanently.
 // ================================================================
 
-// ── STORAGE KEYS ─────────────────────────────────────────────────
+// ── STORAGE KEYS (localStorage — small data) ─────────────────────
 var STORAGE_DOCS  = 'dsp_uploaded_docs';
 var STORAGE_USER  = 'dsp_user';
 var STORAGE_MARKS = 'dsp_bookmarks';
+
+// ── INDEXEDDB (large file storage) ───────────────────────────────
+var IDB_NAME    = 'DocuSphereDB';
+var IDB_STORE   = 'files';
+var IDB_VERSION = 1;
+var _idb        = null;
+
+function openIDB(cb) {
+  if (_idb) { cb(_idb); return; }
+  var req = indexedDB.open(IDB_NAME, IDB_VERSION);
+  req.onupgradeneeded = function(e) {
+    e.target.result.createObjectStore(IDB_STORE);
+  };
+  req.onsuccess = function(e) {
+    _idb = e.target.result;
+    cb(_idb);
+  };
+  req.onerror = function() { cb(null); };
+}
+
+function idbSave(key, value, cb) {
+  openIDB(function(db) {
+    if (!db) { cb && cb(false); return; }
+    var tx  = db.transaction(IDB_STORE, 'readwrite');
+    var req = tx.objectStore(IDB_STORE).put(value, key);
+    req.onsuccess = function() { cb && cb(true); };
+    req.onerror   = function() { cb && cb(false); };
+  });
+}
+
+function idbLoad(key, cb) {
+  openIDB(function(db) {
+    if (!db) { cb(null); return; }
+    var tx  = db.transaction(IDB_STORE, 'readonly');
+    var req = tx.objectStore(IDB_STORE).get(key);
+    req.onsuccess = function() { cb(req.result || null); };
+    req.onerror   = function() { cb(null); };
+  });
+}
+
+function idbDelete(key) {
+  openIDB(function(db) {
+    if (!db) return;
+    db.transaction(IDB_STORE, 'readwrite').objectStore(IDB_STORE).delete(key);
+  });
+}
 
 // ── SEED LIBRARY ─────────────────────────────────────────────────
 var SEED = [
@@ -2078,21 +2124,30 @@ function saveState() {
   try { localStorage.setItem(STORAGE_MARKS, JSON.stringify(bookmarks)); } catch(e) {}
 }
 
-function saveDocFile(id, dataURL) {
-  try { localStorage.setItem('dsp_file_' + id, dataURL); } catch(e) {
-    showToast('Storage full — file saved for this session only.', 'warning');
+function saveDocFile(id, dataURL, cb) {
+  // Save to IndexedDB (much larger capacity than localStorage)
+  idbSave('dsp_file_' + id, dataURL, function(ok) {
+    if (!ok) showToast('Storage error — file saved for this session only.', 'warning');
+    if (cb) cb(ok);
+  });
+  // Also keep in-memory
+  for (var i = 0; i < uploadedDocs.length; i++) {
+    if (uploadedDocs[i].id === id) { uploadedDocs[i].fileData = dataURL; break; }
   }
 }
 
-function loadDocFile(id) {
-  // First check in-memory uploadedDocs
+function loadDocFile(id, cb) {
+  // First check in-memory
   for (var i = 0; i < uploadedDocs.length; i++) {
     if (uploadedDocs[i].id === id && uploadedDocs[i].fileData) {
-      return uploadedDocs[i].fileData;
+      if (cb) cb(uploadedDocs[i].fileData);
+      return;
     }
   }
-  // Then check localStorage
-  try { return localStorage.getItem('dsp_file_' + id); } catch(e) { return null; }
+  // Then check IndexedDB
+  idbLoad('dsp_file_' + id, function(data) {
+    if (cb) cb(data);
+  });
 }
 
 function getAllDocs() { return SEED.concat(uploadedDocs); }
@@ -2394,8 +2449,8 @@ function openReader(id) {
   content.style.outline = 'none';
   annotationMode = false;
 
-  var fileData = doc ? loadDocFile(doc.id) : null;
-
+  if (!doc) return;
+  loadDocFile(doc.id, function(fileData) {
   if (doc && fileData && doc.fileName && doc.fileName.split('.').pop().toLowerCase() === 'pdf') {
     // Real uploaded PDF — embed in iframe for in-browser reading
     content.innerHTML = '<h2 style="margin-bottom:6px">' + doc.icon + ' ' + doc.title + '</h2>'
@@ -2420,7 +2475,7 @@ function openReader(id) {
       + '<div style="text-align:center;padding:40px 0;color:var(--text-light)">'
       + '<i class="fa fa-exclamation-circle" style="font-size:40px;opacity:.4;display:block;margin-bottom:16px"></i>'
       + '<p>File data was cleared from storage. Please re-upload this document.</p></div>';
-  } else {
+  } else if (!fileData) {
     // Seed document — sample text content
     content.innerHTML = '<h2>' + (doc ? doc.icon + ' ' + doc.title : 'Document') + '</h2>'
       + '<p style="color:var(--text-light);font-size:13px">By <strong>' + (doc ? doc.author : 'Unknown') + '</strong>'
@@ -2437,6 +2492,7 @@ function openReader(id) {
       + '<em>📖 Upload 2 documents or upgrade to Premium to unlock full downloads.</em></div>';
   }
 
+  }); // end loadDocFile callback
   document.getElementById('readerModal').classList.add('open');
 }
 
@@ -2511,17 +2567,19 @@ function downloadDoc(id) {
   }
 
   // Trigger real download if file data exists
-  var fileData = doc ? loadDocFile(doc.id) : null;
-  if (fileData) {
-    var a = document.createElement('a');
-    a.href     = fileData;
-    a.download = doc.fileName || doc.title + '.pdf';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  }
-
   if (doc) { doc.downloads++; saveState(); }
   renderDocs();
   showToast('Downloading: "' + (doc ? doc.title : 'Document') + '"', 'success');
+  if (doc) {
+    loadDocFile(doc.id, function(fileData) {
+      if (fileData) {
+        var a = document.createElement('a');
+        a.href     = fileData;
+        a.download = doc.fileName || doc.title + '.pdf';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      }
+    });
+  }
 }
 
 // ── AUTH ──────────────────────────────────────────────────────────
@@ -2675,7 +2733,7 @@ function renderAdminDocs() {
 
 function removeDoc(id, btn) {
   uploadedDocs = uploadedDocs.filter(function(d) { return d.id !== id; });
-  try { localStorage.removeItem('dsp_file_' + id); } catch(e) {}
+  idbDelete('dsp_file_' + id);
   saveState();
   btn.closest('tr').remove();
   renderDocs();
