@@ -1791,6 +1791,23 @@
             </div>
         </div>
 
+        <!-- ☁️ STORAGE METER -->
+        <div style="background:var(--bg-white);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:28px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:38px;height:38px;border-radius:9px;background:rgba(26,86,160,.1);display:flex;align-items:center;justify-content:center;font-size:18px;">☁️</div>
+                    <div>
+                        <div style="font-family:'Merriweather',serif;font-size:14px;font-weight:700;color:var(--text-dark)">ImageKit Cloud Storage</div>
+                        <div style="font-size:11px;color:var(--text-light)">Site-wide pool — all users share this</div>
+                    </div>
+                </div>
+                <span id="storageMeterText" style="font-size:12px;font-weight:700;color:var(--accent)">0.00 GB / 20 GB used (0.0%)</span>
+            </div>
+            <div style="background:var(--bg-light);border-radius:50px;height:10px;overflow:hidden;">
+                <div id="storageMeterBar" style="height:100%;width:0%;background:#2ec477;border-radius:50px;transition:width .5s,background .3s;"></div>
+            </div>
+        </div>
+
         <div class="admin-panel">
             <div class="admin-tabs">
                 <button class="active" onclick="switchTab('bulk')"><i class="fa fa-cloud-upload"></i> Bulk Upload</button>
@@ -2021,59 +2038,80 @@
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ================================================================
 //  DocuSphere Pro — Full Application Logic
-//  Uploaded PDFs are stored in localStorage (Base64) so they
-//  survive page refresh and appear in the library permanently.
+//  Files are uploaded to ImageKit.io (20GB free cloud storage).
+//  Metadata is stored in localStorage. File blobs go to the cloud.
 // ================================================================
 
-// ── STORAGE KEYS (localStorage — small data) ─────────────────────
+// ── IMAGEKIT CONFIG ───────────────────────────────────────────────
+var IK_PUBLIC_KEY   = 'public_c30hJvdKMDjiCkJyVCtjnMM2CD8=';
+var IK_URL_ENDPOINT = 'https://ik.imagekit.io/yndtazuwc';
+var IK_UPLOAD_URL   = 'https://upload.imagekit.io/api/v1/files/upload';
+
+// ── STORAGE LIMIT ─────────────────────────────────────────────────
+var STORAGE_LIMIT_GB = 20;
+var STORAGE_LIMIT_MB = STORAGE_LIMIT_GB * 1024;
+
+// ── STORAGE KEYS (localStorage — small data only) ─────────────────
 var STORAGE_DOCS  = 'dsp_uploaded_docs';
 var STORAGE_USER  = 'dsp_user';
 var STORAGE_MARKS = 'dsp_bookmarks';
+var STORAGE_USAGE = 'dsp_storage_used_mb'; // site-wide MB used
 
-// ── INDEXEDDB (large file storage) ───────────────────────────────
-var IDB_NAME    = 'DocuSphereDB';
-var IDB_STORE   = 'files';
-var IDB_VERSION = 1;
-var _idb        = null;
-
-function openIDB(cb) {
-  if (_idb) { cb(_idb); return; }
-  var req = indexedDB.open(IDB_NAME, IDB_VERSION);
-  req.onupgradeneeded = function(e) {
-    e.target.result.createObjectStore(IDB_STORE);
+// ── IMAGEKIT UPLOAD ──────────────────────────────────────────────
+function getStorageUsedMB() {
+  return parseFloat(localStorage.getItem(STORAGE_USAGE) || '0');
+}
+function addStorageUsedMB(mb) {
+  var used = getStorageUsedMB() + parseFloat(mb);
+  localStorage.setItem(STORAGE_USAGE, used.toFixed(4));
+  updateStorageMeter();
+}
+function updateStorageMeter() {
+  var used   = getStorageUsedMB();
+  var pct    = Math.min(100, (used / STORAGE_LIMIT_MB) * 100).toFixed(1);
+  var usedGB = (used / 1024).toFixed(2);
+  var elText = document.getElementById('storageMeterText');
+  var elBar  = document.getElementById('storageMeterBar');
+  if (elText) elText.textContent = usedGB + ' GB / ' + STORAGE_LIMIT_GB + ' GB used (' + pct + '%)';
+  if (elBar)  { elBar.style.width = pct + '%'; elBar.style.background = pct > 85 ? '#ef4444' : pct > 60 ? '#f59e0b' : '#2ec477'; }
+}
+function uploadToImageKit(file, onProgress, onDone, onError) {
+  var formData = new FormData();
+  formData.append('file', file);
+  formData.append('fileName', Date.now() + '_' + file.name.replace(/\s+/g, '_'));
+  formData.append('publicKey', IK_PUBLIC_KEY);
+  formData.append('useUniqueFileName', 'true');
+  formData.append('folder', '/docusphere');
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', IK_UPLOAD_URL, true);
+  xhr.setRequestHeader('Authorization', 'Basic ' + btoa(IK_PUBLIC_KEY + ':'));
+  xhr.upload.onprogress = function(e) {
+    if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
   };
-  req.onsuccess = function(e) {
-    _idb = e.target.result;
-    cb(_idb);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try { var res = JSON.parse(xhr.responseText); if (onDone) onDone(res.url, res.fileId, res.size); }
+      catch(e) { if (onError) onError('Invalid response'); }
+    } else { if (onError) onError('Upload failed (' + xhr.status + ')'); }
   };
-  req.onerror = function() { cb(null); };
+  xhr.onerror = function() { if (onError) onError('Network error'); };
+  xhr.send(formData);
 }
-
-function idbSave(key, value, cb) {
-  openIDB(function(db) {
-    if (!db) { cb && cb(false); return; }
-    var tx  = db.transaction(IDB_STORE, 'readwrite');
-    var req = tx.objectStore(IDB_STORE).put(value, key);
-    req.onsuccess = function() { cb && cb(true); };
-    req.onerror   = function() { cb && cb(false); };
-  });
+function saveDocFile(id, dataURL, cb) {
+  for (var i = 0; i < uploadedDocs.length; i++) {
+    if (uploadedDocs[i].id === id) { uploadedDocs[i].fileData = dataURL; break; }
+  }
+  if (cb) cb(true);
 }
-
-function idbLoad(key, cb) {
-  openIDB(function(db) {
-    if (!db) { cb(null); return; }
-    var tx  = db.transaction(IDB_STORE, 'readonly');
-    var req = tx.objectStore(IDB_STORE).get(key);
-    req.onsuccess = function() { cb(req.result || null); };
-    req.onerror   = function() { cb(null); };
-  });
-}
-
-function idbDelete(key) {
-  openIDB(function(db) {
-    if (!db) return;
-    db.transaction(IDB_STORE, 'readwrite').objectStore(IDB_STORE).delete(key);
-  });
+function loadDocFile(id, cb) {
+  for (var i = 0; i < uploadedDocs.length; i++) {
+    var d = uploadedDocs[i];
+    if (d.id === id) {
+      if (d.cloudUrl) { if (cb) cb(d.cloudUrl); return; }
+      if (d.fileData) { if (cb) cb(d.fileData); return; }
+    }
+  }
+  if (cb) cb(null);
 }
 
 // ── SEED LIBRARY ─────────────────────────────────────────────────
@@ -2139,31 +2177,7 @@ function saveState() {
   try { localStorage.setItem(STORAGE_MARKS, JSON.stringify(bookmarks)); } catch(e) {}
 }
 
-function saveDocFile(id, dataURL, cb) {
-  // Save to IndexedDB (much larger capacity than localStorage)
-  idbSave('dsp_file_' + id, dataURL, function(ok) {
-    if (!ok) showToast('Storage error — file saved for this session only.', 'warning');
-    if (cb) cb(ok);
-  });
-  // Also keep in-memory
-  for (var i = 0; i < uploadedDocs.length; i++) {
-    if (uploadedDocs[i].id === id) { uploadedDocs[i].fileData = dataURL; break; }
-  }
-}
 
-function loadDocFile(id, cb) {
-  // First check in-memory
-  for (var i = 0; i < uploadedDocs.length; i++) {
-    if (uploadedDocs[i].id === id && uploadedDocs[i].fileData) {
-      if (cb) cb(uploadedDocs[i].fileData);
-      return;
-    }
-  }
-  // Then check IndexedDB
-  idbLoad('dsp_file_' + id, function(data) {
-    if (cb) cb(data);
-  });
-}
 
 function getAllDocs() { return SEED.concat(uploadedDocs); }
 
@@ -2316,87 +2330,76 @@ function handleFileSelect(event) {
 function processUpload(file) {
   var okExt = ['pdf','doc','docx','txt','ppt','pptx'];
   var ext = file.name.split('.').pop().toLowerCase();
-  if (okExt.indexOf(ext) === -1) {
-    showToast('"' + file.name + '" — unsupported format.', 'error');
-    return;
+  if (okExt.indexOf(ext) === -1) { showToast('"' + file.name + '" — unsupported format.', 'error'); return; }
+
+  // Check site-wide storage limit
+  var sizeMB = (file.size / 1048576);
+  if (getStorageUsedMB() + sizeMB > STORAGE_LIMIT_MB) {
+    showToast('Storage limit reached (' + STORAGE_LIMIT_GB + 'GB). No more uploads possible.', 'error'); return;
   }
 
-  // Show progress UI
   var wrap   = document.getElementById('uploadProgress');
   var nameEl = document.getElementById('uploadFileName');
   var pctEl  = document.getElementById('uploadPercent');
   var fillEl = document.getElementById('progressFill');
-
   if (nameEl) nameEl.textContent = file.name;
   if (pctEl)  pctEl.textContent  = '0%';
   if (fillEl) fillEl.style.width = '0%';
   if (wrap)   wrap.style.display = '';
 
-  // Read file as DataURL (Base64)
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    var dataURL = ev.target.result;
-    var val = 0;
-    var iv = setInterval(function() {
-      val = Math.min(100, val + Math.floor(Math.random() * 20) + 8);
-      if (fillEl) fillEl.style.width = val + '%';
-      if (pctEl)  pctEl.textContent  = val + '%';
-      if (val >= 100) {
-        clearInterval(iv);
-        setTimeout(function() {
-          if (wrap) wrap.style.display = 'none';
-          finishUpload(file, dataURL);
-        }, 300);
-      }
-    }, 80);
-  };
-  reader.onerror = function() {
-    showToast('Could not read "' + file.name + '". Try again.', 'error');
-    if (wrap) wrap.style.display = 'none';
-  };
-  reader.readAsDataURL(file);
+  showToast('Uploading to cloud... ☁️', 'success');
+
+  uploadToImageKit(
+    file,
+    function(pct) {
+      if (fillEl) fillEl.style.width = pct + '%';
+      if (pctEl)  pctEl.textContent  = pct + '%';
+    },
+    function(cloudUrl, fileId, fileSize) {
+      if (wrap) wrap.style.display = 'none';
+      finishUpload(file, cloudUrl, fileId);
+    },
+    function(errMsg) {
+      if (wrap) wrap.style.display = 'none';
+      showToast('Cloud upload failed: ' + errMsg, 'error');
+    }
+  );
 }
 
-function finishUpload(file, dataURL) {
+function finishUpload(file, cloudUrl, ikFileId) {
   user.uploads++;
-
-  var ext   = file.name.split('.').pop().toLowerCase();
-  var icon  = ext === 'pdf' ? '📄' : (ext === 'ppt' || ext === 'pptx') ? '📊' : (ext === 'doc' || ext === 'docx') ? '📝' : '📃';
-  var title = file.name.replace(/\.[^.]+$/, '').replace(/[_\-]+/g, ' ');
+  var ext    = file.name.split('.').pop().toLowerCase();
+  var icon   = ext === 'pdf' ? '📄' : (ext === 'ppt' || ext === 'pptx') ? '📊' : (ext === 'doc' || ext === 'docx') ? '📝' : '📃';
+  var title  = file.name.replace(/\.[^.]+$/, '').replace(/[_\-]+/g, ' ');
   var sizeMB = (file.size / 1048576).toFixed(2);
-  var id = nextId++;
+  var id     = nextId++;
 
   var newDoc = {
-    id:       id,
-    title:    title,
-    author:   user.name || 'You',
-    category: 'General',
-    type:     ext.toUpperCase(),
-    access:   'free',
-    icon:     icon,
-    pages:    Math.max(1, Math.floor(file.size / 3000)),
-    rating:   5.0,
-    downloads: 0,
-    fileData:  dataURL,   // kept in memory this session
-    fileName:  file.name,
-    fileSize:  sizeMB,
-    uploadedAt: new Date().toLocaleDateString()
+    id:         id,
+    title:      title,
+    author:     user.name || 'You',
+    category:   'General',
+    type:       ext.toUpperCase(),
+    access:     'free',
+    icon:       icon,
+    pages:      Math.max(1, Math.floor(file.size / 3000)),
+    rating:     5.0,
+    downloads:  0,
+    cloudUrl:   cloudUrl,   // ImageKit CDN URL — permanent cloud link
+    ikFileId:   ikFileId,
+    fileName:   file.name,
+    fileSize:   sizeMB,
+    uploadDate: new Date().toLocaleDateString()
   };
 
   uploadedDocs.push(newDoc);
-
-  // Persist file data separately (big blob)
-  saveDocFile(id, dataURL);
-  // Persist metadata
+  addStorageUsedMB(parseFloat(sizeMB));
   saveState();
 
-  // Add compact row to upload history table
   var tbody = document.getElementById('uploadHistoryBody');
   if (tbody) {
-    // Remove empty-state row if present
     var empty = tbody.querySelector('td[colspan]');
     if (empty) empty.closest('tr').remove();
-
     var row = document.createElement('tr');
     row.style.cssText = 'border-bottom:1px solid var(--border)';
     var shortName = file.name.length > 22 ? file.name.substring(0,20)+'...' : file.name;
@@ -2405,29 +2408,19 @@ function finishUpload(file, dataURL) {
         + '<i class="fa fa-file-pdf-o" style="color:var(--accent);margin-right:6px"></i>'
         + '<span title="' + file.name + '">' + shortName + '</span></td>'
       + '<td style="padding:9px 8px;font-size:11px;color:var(--text-light);white-space:nowrap">' + sizeMB + ' MB</td>'
-      + '<td style="padding:9px 14px 9px 8px;text-align:right"><span class="status-badge uploaded" style="font-size:10px"><i class="fa fa-check"></i> Done</span></td>';
+      + '<td style="padding:9px 8px;font-size:11px;color:var(--text-light)">' + new Date().toLocaleDateString() + '</td>'
+      + '<td style="padding:9px 14px 9px 8px;text-align:right"><span class="status-badge uploaded" style="font-size:10px"><i class="fa fa-check"></i> ☁️ Cloud</span></td>';
     tbody.prepend(row);
-
-    // Update badge count
     var badge = document.getElementById('uploadCountBadge');
     if (badge) badge.textContent = uploadedDocs.length + ' file' + (uploadedDocs.length !== 1 ? 's' : '');
   }
 
-  // Re-render library so the new card appears immediately
   renderDocs();
-
-  notifyAdmin(
-    'New Document Uploaded',
-    user.name,
-    '',
-    'Title: ' + title + ' | Size: ' + sizeMB + ' MB | Category: ' + cat
-  );
-  showToast('"' + title + '" is now in the Library! ✅', 'success');
+  notifyAdmin('New Document Uploaded', user.name, '', 'Title: ' + title + ' | Size: ' + sizeMB + ' MB | Cloud: ' + cloudUrl);
+  showToast('"' + title + '" uploaded to cloud! ☁️✅', 'success');
 
   if (user.uploads === 2 && !user.premium) {
-    setTimeout(function() {
-      showToast('🎉 You can now download any free document!', 'success');
-    }, 1800);
+    setTimeout(function() { showToast('🎉 You can now download any free document!', 'success'); }, 1800);
   }
 }
 
@@ -2737,8 +2730,11 @@ function downloadDoc(id) {
       if (fileData) {
         var a = document.createElement('a');
         a.href     = fileData;
+        a.target   = '_blank';
         a.download = doc.fileName || doc.title + '.pdf';
         document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      } else {
+        showToast('File not available for download.', 'warning');
       }
     });
   }
@@ -2969,7 +2965,7 @@ function renderAdminDocs() {
 
 function removeDoc(id, btn) {
   uploadedDocs = uploadedDocs.filter(function(d) { return d.id !== id; });
-  idbDelete('dsp_file_' + id);
+  // cloud file - deletion via ImageKit API not needed client-side
   saveState();
   btn.closest('tr').remove();
   renderDocs();
@@ -3182,6 +3178,7 @@ window.addEventListener('scroll', function() {
 
 // ── BOOT ──────────────────────────────────────────────────────────
 loadState();
+updateStorageMeter();
 
 // Restore user bar if logged in
 if (user.loggedIn && user.name) {
