@@ -2038,14 +2038,9 @@
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ================================================================
 //  DocuSphere Pro — Full Application Logic
-//  Files are uploaded to ImageKit.io (20GB free cloud storage).
-//  Metadata is stored in localStorage. File blobs go to the cloud.
+//  Files are uploaded via Netlify Function to Netlify Blobs.
+//  Metadata stored in localStorage. Files stored in cloud.
 // ================================================================
-
-// ── IMAGEKIT CONFIG ───────────────────────────────────────────────
-var IK_PUBLIC_KEY   = 'public_c30hJvdKMDjiCkJyVCtjnMM2CD8=';
-var IK_URL_ENDPOINT = 'https://ik.imagekit.io/yndtazuwc';
-var IK_UPLOAD_URL   = 'https://upload.imagekit.io/api/v1/files/upload';
 
 // ── STORAGE LIMIT ─────────────────────────────────────────────────
 var STORAGE_LIMIT_GB = 20;
@@ -2055,9 +2050,9 @@ var STORAGE_LIMIT_MB = STORAGE_LIMIT_GB * 1024;
 var STORAGE_DOCS  = 'dsp_uploaded_docs';
 var STORAGE_USER  = 'dsp_user';
 var STORAGE_MARKS = 'dsp_bookmarks';
-var STORAGE_USAGE = 'dsp_storage_used_mb'; // site-wide MB used
+var STORAGE_USAGE = 'dsp_storage_used_mb';
 
-// ── IMAGEKIT UPLOAD ──────────────────────────────────────────────
+// ── STORAGE METER ─────────────────────────────────────────────────
 function getStorageUsedMB() {
   return parseFloat(localStorage.getItem(STORAGE_USAGE) || '0');
 }
@@ -2075,26 +2070,35 @@ function updateStorageMeter() {
   if (elText) elText.textContent = usedGB + ' GB / ' + STORAGE_LIMIT_GB + ' GB used (' + pct + '%)';
   if (elBar)  { elBar.style.width = pct + '%'; elBar.style.background = pct > 85 ? '#ef4444' : pct > 60 ? '#f59e0b' : '#2ec477'; }
 }
-function uploadToImageKit(file, onProgress, onDone, onError) {
+
+// ── NETLIFY BLOB UPLOAD ───────────────────────────────────────────
+function uploadToCloud(file, onProgress, onDone, onError) {
   var formData = new FormData();
   formData.append('file', file);
-  formData.append('fileName', Date.now() + '_' + file.name.replace(/\s+/g, '_'));
-  formData.append('publicKey', IK_PUBLIC_KEY);
-  formData.append('useUniqueFileName', 'true');
-  formData.append('folder', '/docusphere');
+  formData.append('fileName', Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_'));
+  formData.append('author', user.name || 'Anonymous');
+  formData.append('category', 'General');
+
   var xhr = new XMLHttpRequest();
-  xhr.open('POST', IK_UPLOAD_URL, true);
-  xhr.setRequestHeader('Authorization', 'Basic ' + btoa(IK_PUBLIC_KEY + ':'));
+  xhr.open('POST', '/.netlify/functions/upload', true);
+
   xhr.upload.onprogress = function(e) {
     if (e.lengthComputable && onProgress) onProgress(Math.round((e.loaded / e.total) * 100));
   };
   xhr.onload = function() {
     if (xhr.status === 200) {
-      try { var res = JSON.parse(xhr.responseText); if (onDone) onDone(res.url, res.fileId, res.size); }
-      catch(e) { if (onError) onError('Invalid response'); }
-    } else { if (onError) onError('Upload failed (' + xhr.status + ')'); }
+      try {
+        var res = JSON.parse(xhr.responseText);
+        if (onDone) onDone(res.url, res.key, res.sizeMB);
+      } catch(e) { if (onError) onError('Invalid response from server'); }
+    } else {
+      try {
+        var err = JSON.parse(xhr.responseText);
+        if (onError) onError(err.error || 'Upload failed (' + xhr.status + ')');
+      } catch(e) { if (onError) onError('Upload failed (' + xhr.status + ')'); }
+    }
   };
-  xhr.onerror = function() { if (onError) onError('Network error'); };
+  xhr.onerror = function() { if (onError) onError('Network error — check your connection'); };
   xhr.send(formData);
 }
 function saveDocFile(id, dataURL, cb) {
@@ -2180,6 +2184,44 @@ function saveState() {
 
 
 function getAllDocs() { return SEED.concat(uploadedDocs); }
+
+// ── LOAD SHARED LIBRARY FROM DATABASE ────────────────────────────
+function loadCloudDocs() {
+  fetch('/.netlify/functions/docs?action=list')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data.docs) return;
+      // Merge cloud docs into uploadedDocs avoiding duplicates
+      var existingIds = uploadedDocs.map(function(d) { return d.id; });
+      data.docs.forEach(function(row) {
+        var cloudId = 'cloud_' + row.id;
+        if (existingIds.indexOf(cloudId) !== -1) return;
+        uploadedDocs.push({
+          id:         cloudId,
+          title:      row.title,
+          author:     row.uploaded_by || row.author,
+          category:   row.category   || 'General',
+          type:       row.file_type  || 'PDF',
+          access:     row.access     || 'free',
+          icon:       row.icon       || '📄',
+          pages:      row.pages      || 1,
+          rating:     parseFloat(row.rating) || 5.0,
+          downloads:  row.downloads  || 0,
+          cloudUrl:   row.file_url,
+          fileName:   row.file_name,
+          fileSize:   row.file_size,
+          uploadDate: row.uploaded_at ? new Date(row.uploaded_at).toLocaleDateString() : '',
+          fromCloud:  true,
+          dbId:       row.id
+        });
+      });
+      renderDocs();
+      updateStorageMeter();
+    })
+    .catch(function(err) {
+      console.warn('Could not load cloud docs:', err);
+    });
+}
 
 // ── GRADIENTS ─────────────────────────────────────────────────────
 var GRADS = [
@@ -2349,19 +2391,19 @@ function processUpload(file) {
 
   showToast('Uploading to cloud... ☁️', 'success');
 
-  uploadToImageKit(
+  uploadToCloud(
     file,
     function(pct) {
       if (fillEl) fillEl.style.width = pct + '%';
       if (pctEl)  pctEl.textContent  = pct + '%';
     },
-    function(cloudUrl, fileId, fileSize) {
+    function(cloudUrl, key, sizeMB) {
       if (wrap) wrap.style.display = 'none';
-      finishUpload(file, cloudUrl, fileId);
+      finishUpload(file, cloudUrl, key);
     },
     function(errMsg) {
       if (wrap) wrap.style.display = 'none';
-      showToast('Cloud upload failed: ' + errMsg, 'error');
+      showToast('Upload failed: ' + errMsg, 'error');
     }
   );
 }
@@ -2722,7 +2764,13 @@ function downloadDoc(id) {
   }
 
   // Trigger real download if file data exists
-  if (doc) { doc.downloads++; saveState(); }
+  if (doc) {
+    doc.downloads++;
+    saveState();
+    if (doc.dbId) {
+      fetch('/.netlify/functions/docs?action=download&id=' + doc.dbId).catch(function(){});
+    }
+  }
   renderDocs();
   showToast('Downloading: "' + (doc ? doc.title : 'Document') + '"', 'success');
   if (doc) {
@@ -3179,6 +3227,7 @@ window.addEventListener('scroll', function() {
 // ── BOOT ──────────────────────────────────────────────────────────
 loadState();
 updateStorageMeter();
+loadCloudDocs();
 
 // Restore user bar if logged in
 if (user.loggedIn && user.name) {
